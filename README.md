@@ -31,12 +31,12 @@ Usage of ./bin/show:
 #### Example
 
 ```
-$> cat feature.geojson | ./bin/show  -
+$> ./bin/show feature.geojson
 2024/08/12 18:00:26 Features are viewable at http://localhost:54420
 ```
 
 ```
-$> cat feature.geojson | ./bin/show -map-provider leaflet -map-tile-url '...' -
+$> cat feature.geojson | ./bin/show -map-provider leaflet -map-tile-url 'https://tile.openstreetmap.org/{z}/{x}/{y}.png' -
 2024/08/12 18:16:51 Features are viewable at http://localhost:61222
 ```
 
