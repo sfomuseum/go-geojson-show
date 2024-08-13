@@ -8,6 +8,11 @@ Documentation is incomplete at this time.
 
 ## Tools
 
+```
+$> make cli
+go build -mod vendor -ldflags="-s -w" -o bin/show cmd/show/main.go
+```
+
 ### show
 
 ```
