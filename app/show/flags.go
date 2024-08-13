@@ -25,7 +25,7 @@ func DefaultFlagSet() *flag.FlagSet {
 	fs.IntVar(&port, "port", 0, "The port number to listen for requests on (on localhost). If 0 then a random port number will be chosen.")
 
 	fs.Usage = func() {
-		fmt.Fprintf(os.Stderr, "Command-line tool for serving GeoJSON files from an on-demand web server.\n")
+		fmt.Fprintf(os.Stderr, "Command-line tool for serving GeoJSON features from an on-demand web server.\n")
 		fmt.Fprintf(os.Stderr, "Usage:\n\t %s path(N) path(N)\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, "Valid options are:\n")
 		fs.PrintDefaults()

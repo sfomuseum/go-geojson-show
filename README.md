@@ -1,6 +1,6 @@
 # go-geojson-show
 
-Command-line tool for serving GeoJSON files from an on-demand web server.
+Command-line tool for serving GeoJSON features from an on-demand web server.
 
 ## Motivation
 
@@ -17,7 +17,7 @@ go build -mod vendor -ldflags="-s -w" -o bin/show cmd/show/main.go
 
 ```
 $> ./bin/show -h
-Command-line tool for serving GeoJSON files from an on-demand web server.
+Command-line tool for serving GeoJSON features from an on-demand web server.
 Usage:
 	 ./bin/show path(N) path(N)
 Valid options are:
