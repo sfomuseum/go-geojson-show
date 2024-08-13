@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"io"
 	"log"
 	"log/slog"
 	"net"
@@ -20,7 +19,6 @@ import (
 	"github.com/paulmach/orb/geojson"
 	"github.com/pkg/browser"
 	"github.com/sfomuseum/go-http-protomaps"
-	"github.com/tidwall/gjson"
 	wasm_js "github.com/whosonfirst/go-whosonfirst-format-wasm/static/javascript"
 	"github.com/whosonfirst/go-whosonfirst-format-wasm/static/wasm"
 )
@@ -59,89 +57,17 @@ func Run(ctx context.Context) error {
 }
 
 func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
-	opts := RunOptionsFromFlagSet(fs)
+	
+	opts, err := RunOptionsFromFlagSet(fs)
+
+	if err != nil {
+		return err
+	}
+
 	return RunWithOptions(ctx, opts)
 }
 
 func RunWithOptions(ctx context.Context, opts *RunOptions) error {
-
-	fc := geojson.NewFeatureCollection()
-
-	append_features := func(r io.Reader) error {
-
-		body, err := io.ReadAll(r)
-
-		if err != nil {
-			return fmt.Errorf("Failed to read body, %w", err)
-		}
-
-		type_rsp := gjson.GetBytes(body, "type")
-
-		switch type_rsp.String() {
-		case "Feature":
-
-			f, err := geojson.UnmarshalFeature(body)
-
-			if err != nil {
-				return fmt.Errorf("Failed to unmarshal Feature, %w", err)
-			}
-
-			fc.Append(f)
-
-		case "FeatureCollection":
-
-			other_fc, err := geojson.UnmarshalFeatureCollection(body)
-
-			if err != nil {
-				return fmt.Errorf("Failed to unmarshal record as FeatureCollection, %w", err)
-			}
-
-			for _, f := range other_fc.Features {
-				fc.Append(f)
-			}
-
-		default:
-			return fmt.Errorf("Invalid type, %s", type_rsp.String())
-		}
-
-		return nil
-	}
-
-	stdin := false
-
-	if len(opts.URIs) == 1 && opts.URIs[0] == "-" {
-		stdin = true
-	}
-
-	if stdin {
-
-		err := append_features(os.Stdin)
-
-		if err != nil {
-			return fmt.Errorf("Failed to append features, %v", err)
-		}
-
-	} else {
-
-		for _, path := range opts.URIs {
-
-			r, err := os.Open(path)
-
-			if err != nil {
-				return fmt.Errorf("Failed to open %s for reading, %v", path, err)
-			}
-
-			defer r.Close()
-
-			err = append_features(r)
-
-			if err != nil {
-				return fmt.Errorf("Failed to append features, %v", err)
-			}
-		}
-	}
-
-	//
 
 	mux := http.NewServeMux()
 
@@ -162,6 +88,8 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	mux.Handle("/javascript/wasm/", http.StripPrefix("/javascript/wasm/", wasm_js_handler))
 	mux.Handle("/wasm/", http.StripPrefix("/wasm/", wasm_handler))
 
+	fc := geojson.NewFeatureCollection()
+	fc.Features = opts.Features	
 	data_handler := dataHandler(fc)
 
 	mux.Handle("/features.geojson", data_handler)
