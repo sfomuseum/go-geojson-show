@@ -98,13 +98,11 @@ window.addEventListener("load", function load(event){
 		    tile_layer.addTo(map);
 		    break;
 		    
-		case "protomaps":
+		case "protomaps":		    
 
 		    var tile_url = cfg.tile_url;
 
-		    console.log("CONFIG", cfg);
-		    
-		    var tile_layer = protomaps.leafletLayer({
+		    var tile_layer = protomapsL.leafletLayer({
 			url: tile_url,
 			theme: cfg.protomaps.theme,
 		    })

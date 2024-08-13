@@ -44,3 +44,7 @@ $> cat feature.geojson | ./bin/show -map-provider protomaps -map-tile-url file:/
 $> cat feature.geojson | ./bin/show -map-provider protomaps -map-tile-url api://{APIKEY} -
 2024/08/12 18:18:14 Features are viewable at http://localhost:51021
 ```
+
+## See also
+
+* https://github.com/protomaps/protomaps-leaflet
