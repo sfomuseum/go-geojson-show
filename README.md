@@ -71,7 +71,7 @@ $> ./bin/show \
 2024/08/13 13:03:17 Features are viewable at http://localhost:62669
 ```
 
-##### Read the (GeoJSON) output of another process and show those features on a map using a local [Protomaps](https://protomaps.com) database file a named Protomaps theme
+##### Read the (GeoJSON) output of another process and show those features on a map using a local [Protomaps](https://protomaps.com) database file and a named Protomaps theme
 
 ![](docs/images/go-geojson-show-protomaps-local.png)
 
