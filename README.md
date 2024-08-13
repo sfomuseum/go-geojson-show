@@ -30,9 +30,9 @@ Usage of ./bin/show:
 
 #### Examples
 
-![](docs/images/go-geojson-show-simple.png)
+##### Read a single GeoJSON file from disk and show it on a map using the default settings (OpenStreetMap)
 
-Read a single GeoJSON file from disk and show it on a map using the default settings (OpenStreetMap):
+![](docs/images/go-geojson-show-simple.png)
 
 ```
 $> ./bin/show \
@@ -41,9 +41,10 @@ $> ./bin/show \
 2024/08/13 13:01:44 Features are viewable at http://localhost:55799
 ```
 
+##### Read multiple GeoJSON files from disk and show them on a map using the default settings (OpenStreetMap)
+
 ![](docs/images/go-geojson-show-multi.png)
 
-Read multiple GeoJSON files from disk and show them on a map using the default settings (OpenStreetMap):
 
 ```
 $> ./bin/show \
@@ -53,9 +54,9 @@ $> ./bin/show \
 2024/08/13 13:08:44 Features are viewable at http://localhost:54501
 ```
 
-![](docs/images/go-geojson-show-custom.png)
+##### Read a single GeoJSON file from disk and show it on a map using custom tiles:
 
-Read a single GeoJSON file from	disk and show it on a map using custom tiles:
+![](docs/images/go-geojson-show-custom.png)
 
 ```
 $> ./bin/show \
@@ -65,9 +66,9 @@ $> ./bin/show \
 2024/08/13 13:03:17 Features are viewable at http://localhost:62669
 ```
 
-![](docs/images/go-geojson-show-protomaps-local.png)
+##### Read the (GeoJSON) output of another process and show those features on a map using a local Protomaps database file a named Protomaps theme
 
-Read the (GeoJSON) output of another process and show those features on a map using a local Protomaps database file a named Protomaps theme:
+![](docs/images/go-geojson-show-protomaps-local.png)
 
 ```
 $> cat /usr/local/data/sfomuseum-data-architecture/data/102/527/513/102527513.geojson | \
@@ -80,9 +81,9 @@ $> cat /usr/local/data/sfomuseum-data-architecture/data/102/527/513/102527513.ge
 2024/08/13 13:05:13 Features are viewable at http://localhost:54749
 ```
 
-![](docs/images/go-geojson-show-protomaps-api.png)
+##### Read the (GeoJSON) output of another process and show those features on a map using the Protomaps API
 
-Read the (GeoJSON) output of another process and show those features on a map using the Protomaps API:
+![](docs/images/go-geojson-show-protomaps-api.png)
 
 ```
 $> cat /usr/local/data/sfomuseum-data-architecture/data/102/527/513/102527513.geojson | \
