@@ -12,10 +12,11 @@ import (
 )
 
 type RunOptions struct {
-	MapProvider string
-	MapTileURI  string
-	Port        int
-	Features    []*geojson.Feature
+	MapProvider    string
+	MapTileURI     string
+	ProtomapsTheme string
+	Port           int
+	Features       []*geojson.Feature
 }
 
 func RunOptionsFromFlagSet(fs *flag.FlagSet) (*RunOptions, error) {
@@ -23,9 +24,10 @@ func RunOptionsFromFlagSet(fs *flag.FlagSet) (*RunOptions, error) {
 	flagset.Parse(fs)
 
 	opts := &RunOptions{
-		MapProvider: map_provider,
-		MapTileURI:  map_tile_uri,
-		Port:        port,
+		MapProvider:    map_provider,
+		MapTileURI:     map_tile_uri,
+		ProtomapsTheme: protomaps_theme,
+		Port:           port,
 	}
 
 	features := make([]*geojson.Feature, 0)

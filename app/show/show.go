@@ -57,7 +57,7 @@ func Run(ctx context.Context) error {
 }
 
 func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
-	
+
 	opts, err := RunOptionsFromFlagSet(fs)
 
 	if err != nil {
@@ -89,7 +89,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	mux.Handle("/wasm/", http.StripPrefix("/wasm/", wasm_handler))
 
 	fc := geojson.NewFeatureCollection()
-	fc.Features = opts.Features	
+	fc.Features = opts.Features
 	data_handler := dataHandler(fc)
 
 	mux.Handle("/features.geojson", data_handler)
@@ -127,7 +127,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		}
 
 		map_cfg.Protomaps = &protomapsConfig{
-			Theme: protomaps_theme,
+			Theme: opts.ProtomapsTheme,
 		}
 	}
 
