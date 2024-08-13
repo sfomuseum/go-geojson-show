@@ -28,6 +28,8 @@ github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c/go.mod h1:7rwL4CYBLnjL
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
+github.com/sfomuseum/go-flags v0.10.0 h1:1OC1ACxpWMsl3XQ9OeNVMQj7Zi2CzufP3Rym3mPI8HU=
+github.com/sfomuseum/go-flags v0.10.0/go.mod h1:VXOnnX1/yxQpX2yiwHaBV6aCmhtszQOL5bL1/nNo3co=
 github.com/sfomuseum/go-http-protomaps v0.3.0 h1:e89s6wsDHyCXDgB6hFARMjsdrgn/lG4BRybRJuXTktY=
 github.com/sfomuseum/go-http-protomaps v0.3.0/go.mod h1:K/PDDhy0c3xcPK2Bot7+oIz2l8QQLZys9SqAblhHT6I=
 github.com/sfomuseum/go-http-rollup v0.0.3 h1:N3CnjZluhzRhqPpdM+GTuzCnjM0V5xtPX+LeCgZWhTA=
