@@ -1,6 +1,6 @@
 # go-geojson-show
 
-Command-line tool for server GeoJSON files from an on-demand web server.
+Command-line tool for serving GeoJSON files from an on-demand web server.
 
 ## Motivation
 
@@ -17,7 +17,10 @@ go build -mod vendor -ldflags="-s -w" -o bin/show cmd/show/main.go
 
 ```
 $> ./bin/show -h
-Usage of ./bin/show:
+Command-line tool for serving GeoJSON files from an on-demand web server.
+Usage:
+	 ./bin/show path(N) path(N)
+Valid options are:
   -map-provider string
     	Valid options are: leaflet, protomaps (default "leaflet")
   -map-tile-uri string
@@ -26,6 +29,8 @@ Usage of ./bin/show:
     	The port number to listen for requests on (on localhost). If 0 then a random port number will be chosen.
   -protomaps-theme string
     	A valid Protomaps theme label. (default "white")
+
+If the only path as input is "-" then data will be read from STDIN.
 ```
 
 #### Examples
@@ -66,7 +71,7 @@ $> ./bin/show \
 2024/08/13 13:03:17 Features are viewable at http://localhost:62669
 ```
 
-##### Read the (GeoJSON) output of another process and show those features on a map using a local Protomaps database file a named Protomaps theme
+##### Read the (GeoJSON) output of another process and show those features on a map using a local [Protomaps](https://protomaps.com) database file a named Protomaps theme
 
 ![](docs/images/go-geojson-show-protomaps-local.png)
 
