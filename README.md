@@ -2,9 +2,9 @@
 
 Command-line tool for server GeoJSON files from an on-demand web server.
 
-## Documentation
+## Motivation
 
-Documentation is incomplete at this time.
+It's basically a simpler and dumber version of [geojson.io](https://geojson.io/) that you can run locally from a single binary application. Also, the option for custom, local and private tile data.
 
 ## Tools
 
@@ -28,28 +28,68 @@ Usage of ./bin/show:
     	A valid Protomaps theme label. (default "white")
 ```
 
-#### Example
+#### Examples
+
+![](docs/images/go-geojson-show-simple.png)
+
+Read a single GeoJSON file from disk and show it on a map using the default settings (OpenStreetMap):
 
 ```
-$> ./bin/show feature.geojson
-2024/08/12 18:00:26 Features are viewable at http://localhost:54420
+$> ./bin/show \
+	/usr/local/data/sfomuseum-data-architecture/data/102/527/513/102527513.geojson
+	
+2024/08/13 13:01:44 Features are viewable at http://localhost:55799
 ```
 
-```
-$> cat feature.geojson | ./bin/show -map-provider leaflet -map-tile-url 'https://tile.openstreetmap.org/{z}/{x}/{y}.png' -
-2024/08/12 18:16:51 Features are viewable at http://localhost:61222
-```
+![](docs/images/go-geojson-show-multi.png)
+
+Read multiple GeoJSON files from disk and show them on a map using the default settings (OpenStreetMap):
 
 ```
-$> cat feature.geojson | ./bin/show -map-provider protomaps -map-tile-url file:///path/to/your/database.pmtiles -
-2024/08/12 18:17:51 Features are viewable at http://localhost:49316
+$> ./bin/show \
+	/usr/local/data/sfomuseum-data-architecture/data/102/527/513/102527513.geojson \
+	/usr/local/data/oak.geojson
+	
+2024/08/13 13:08:44 Features are viewable at http://localhost:54501
 ```
 
+![](docs/images/go-geojson-show-custom.png)
+
+Read a single GeoJSON file from	disk and show it on a map using custom tiles:
+
 ```
-$> cat feature.geojson | ./bin/show -map-provider protomaps -map-tile-url api://{APIKEY} -
-2024/08/12 18:18:14 Features are viewable at http://localhost:51021
+$> ./bin/show \
+	-map-tile-uri 'https://static.sfomuseum.org/aerial/1978/{z}/{x}/{-y}.png'
+	/usr/local/data/sfomuseum-data-architecture/data/102/527/513/102527513.geojson
+	
+2024/08/13 13:03:17 Features are viewable at http://localhost:62669
 ```
 
-## See also
+![](docs/images/go-geojson-show-protomaps-local.png)
 
-* https://github.com/protomaps/protomaps-leaflet
+Read the (GeoJSON) output of another process and show those features on a map using a local Protomaps database file a named Protomaps theme:
+
+```
+$> cat /usr/local/data/sfomuseum-data-architecture/data/102/527/513/102527513.geojson | \
+	./bin/show \
+	-map-provider protomaps \
+	-map-tile-uri file:///usr/local/sfomuseum/go-http-protomaps/cmd/example/sfo.pmtiles \
+	-protomaps-theme light \
+	-
+	
+2024/08/13 13:05:13 Features are viewable at http://localhost:54749
+```
+
+![](docs/images/go-geojson-show-protomaps-api.png)
+
+Read the (GeoJSON) output of another process and show those features on a map using the Protomaps API:
+
+```
+$> cat /usr/local/data/sfomuseum-data-architecture/data/102/527/513/102527513.geojson | \
+	./bin/show \
+	-map-provider protomaps \
+	-map-tile-uri api://{APIKEY} \
+	-
+	
+2024/08/13 13:07:08 Features are viewable at http://localhost:63818
+```
