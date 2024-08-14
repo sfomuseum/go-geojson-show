@@ -29,7 +29,7 @@ const protomaps_api_tile_url string = "https://api.protomaps.com/tiles/v3/{z}/{x
 //go:embed *.html
 var html_FS embed.FS
 
-//go:embed css/*.css
+//go:embed css/*
 var css_FS embed.FS
 
 //go:embed javascript/*.js javascript/*.map
