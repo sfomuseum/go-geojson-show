@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/sfomuseum/go-flags/flagset"
+	"github.com/sfomuseum/go-flags/multi"
 )
 
 var port int
@@ -16,6 +17,8 @@ var protomaps_theme string
 
 var style string
 var point_style string
+
+var label_properties multi.MultiString
 
 func DefaultFlagSet() *flag.FlagSet {
 
@@ -28,6 +31,8 @@ func DefaultFlagSet() *flag.FlagSet {
 	fs.StringVar(&style, "style", "", "A custom Leaflet style definition for geometries. This may either be a JSON-encoded string or a path on disk.")
 	fs.StringVar(&point_style, "point-style", "", "A custom Leaflet style definition for point geometries. This may either be a JSON-encoded string or a path on disk.")
 	fs.IntVar(&port, "port", 0, "The port number to listen for requests on (on localhost). If 0 then a random port number will be chosen.")
+
+	fs.Var(&label_properties, "label", "Zero or more (GeoJSON Feature) properties to use to construct a label for a feature's popup menu when it is clicked on.")
 
 	fs.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Command-line tool for serving GeoJSON features from an on-demand web server.\n")

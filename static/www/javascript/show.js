@@ -101,8 +101,26 @@ window.addEventListener("load", function load(event){
 			    var show_id = feature["properties"]["show:id"];
 			    select(show_id);
 			});
-			
-			layer.bindPopup("WOO " + show_id);			
+
+			var label_props = cfg.label_properties;
+			var count_props = label_props.length;
+
+			if (count_props > 0) {
+
+			    var label_text = [];
+
+			    for (var i=0; i < count_props; i++){
+
+				var prop = label_props[i];
+				var value = feature.properties[ prop ];
+				
+				label_text.push("<strong>" + prop + "</strong> " + value);
+			    }
+
+			    if (label_text.length > 0){ 
+				layer.bindPopup(label_text.join("<br />"));
+			    }
+			}
 		    }
 		};
 

@@ -12,13 +12,14 @@ import (
 )
 
 type RunOptions struct {
-	MapProvider    string
-	MapTileURI     string
-	ProtomapsTheme string
-	Port           int
-	Features       []*geojson.Feature
-	Style          *LeafletStyle
-	PointStyle     *LeafletStyle
+	MapProvider     string
+	MapTileURI      string
+	ProtomapsTheme  string
+	Port            int
+	Features        []*geojson.Feature
+	Style           *LeafletStyle
+	PointStyle      *LeafletStyle
+	LabelProperties []string
 }
 
 func RunOptionsFromFlagSet(fs *flag.FlagSet) (*RunOptions, error) {
@@ -26,10 +27,11 @@ func RunOptionsFromFlagSet(fs *flag.FlagSet) (*RunOptions, error) {
 	flagset.Parse(fs)
 
 	opts := &RunOptions{
-		MapProvider:    map_provider,
-		MapTileURI:     map_tile_uri,
-		ProtomapsTheme: protomaps_theme,
-		Port:           port,
+		MapProvider:     map_provider,
+		MapTileURI:      map_tile_uri,
+		ProtomapsTheme:  protomaps_theme,
+		Port:            port,
+		LabelProperties: label_properties,
 	}
 
 	if style != "" {

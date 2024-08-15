@@ -103,3 +103,24 @@ $> cat /usr/local/data/sfomuseum-data-architecture/data/102/527/513/102527513.ge
 	
 2024/08/13 13:07:08 Features are viewable at http://localhost:63818
 ```
+
+##### ...styles
+
+```
+$> ./bin/show \
+	-point-style '{"radius": 10, "color": "red", "fillColor": "orange" }' \
+	/usr/local/data/postcards.geojson
+	
+2024/08/15 16:15:37 Features are viewable at http://localhost:63516
+```
+
+##### ...labels
+
+```
+$> ./bin/show \
+	-label wof:name \
+	-label wof:id \
+	/usr/local/data/postcards.geojson
+	
+2024/08/15 16:12:39 Features are viewable at http://localhost:50310
+```
