@@ -2,30 +2,65 @@ window.addEventListener("load", function load(event){
 
     // Null Island
     var map = L.map('map').setView([0.0, 0.0], 12);
+
+    var select = function(show_id){
+
+	unselect();
+	
+	var el = document.getElementById(show_id);
+	
+	if (el){
+	    el.setAttribute("class", "selected");
+	    el.scrollIntoView();
+	}
+	
+    };
+    
+    var unselect = function(){
+	
+	var current = document.querySelector(".selected");
+	
+	if (current){
+	    current.classList.remove("selected");
+	}
+    };
+
+    map.on("click", function(e){
+	unselect();
+    });
     
     var init = function(cfg) {
 	
 	fetch("/features.geojson")
 	    .then((rsp) => rsp.json())
 	    .then((f) => {
+
+		var features = f.features;
+		var count = features.length;
+		
+		for (var i=0; i < count; i++){
+		    var show_id = "show-" + (i+1);
+		    f.features[i]["properties"]["show:id"] = show_id;
+		}
 		
 		var raw_el = document.querySelector("#raw");
 		
-		var format = function(str){
+		var format = function(show_id, str){
 		    
 		    // Remember: wof_format is defined by the /wasm/wof_format.wasm binary.
 			// Details below.
 			
 			wof_format(str).then((rsp) => {
-			    append(rsp);
+			    append(show_id, rsp);
 			}).catch((err) => {
 			    console.warn("Unable to format feature", err, str);
-			    append(str);
+			    append(show_id, str);
 			});
 		};
 		
-		var append = function(str) {
+		var append = function(show_id, str) {
 		    var pre = document.createElement("pre");
+		    pre.setAttribute("id", show_id);
 		    pre.appendChild(document.createTextNode(str));		    
 		    raw_el.appendChild(pre);
 		};
@@ -41,27 +76,33 @@ window.addEventListener("load", function load(event){
 			var count = features.length;
 			
 			for (var i=0; i < count; i++){
-			    var str_f = JSON.stringify(features[i], "", " ");		    			
-			    format(str_f);
+			    
+			    var show_id = features[i]["properties"]["show:id"];
+			    var this_f = structuredClone(features[i]);
+			    
+			    delete(this_f["properties"]["show:id"]);
+			    var str_f = JSON.stringify(this_f);
+			    
+			    format(show_id, str_f);
 			}
 			
 		    }).catch((err) => {
 			console.warn("Unable to load wof_format.wasm", err);
 			var str_f = JSON.stringify(f, "", " ");		    
-			append(str_r);
+			append(0, str_f);
 		    });
 		    
 		}
 
-		/*
-
-
-		*/
-				
 		var geojson_args = {
-		    // pointToLayer: pt_handler,
 		    onEachFeature: function (feature, layer) {
-			layer.bindPopup("WOO");
+
+			layer.on("click", function(e){			    
+			    var show_id = feature["properties"]["show:id"];
+			    select(show_id);
+			});
+			
+			layer.bindPopup("WOO " + show_id);			
 		    }
 		};
 
@@ -76,7 +117,7 @@ window.addEventListener("load", function load(event){
 		    }
 		    
 		}
-		
+
 		var geojson_layer = L.geoJSON(f, geojson_args);
 		geojson_layer.addTo(map);
 		

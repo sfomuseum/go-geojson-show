@@ -17,3 +17,7 @@ body {
 	height: 100vh;
 	overflow: scroll;
 }
+
+.selected {
+	font-weight: 700;
+}
