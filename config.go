@@ -7,8 +7,9 @@ type mapConfig struct {
 	// A valid Leaflet tile layer URI.
 	TileURL string `json:"tile_url"`
 	// Optional Protomaps configuration details
-	Protomaps *protomapsConfig       `json:"protomaps,omitempty"`
-	Style     map[string]interface{} `json:"style,omitempty"`
+	Protomaps  *protomapsConfig `json:"protomaps,omitempty"`
+	Style      *LeafletStyle    `json:"style,omitempty"`
+	PointStyle *LeafletStyle    `json:"point_style,omitempty"`
 }
 
 // protomapsConfig defines configuration details for maps using Protomaps.

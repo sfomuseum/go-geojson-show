@@ -17,6 +17,8 @@ type RunOptions struct {
 	ProtomapsTheme string
 	Port           int
 	Features       []*geojson.Feature
+	Style          *LeafletStyle
+	PointStyle     *LeafletStyle
 }
 
 func RunOptionsFromFlagSet(fs *flag.FlagSet) (*RunOptions, error) {
@@ -28,6 +30,28 @@ func RunOptionsFromFlagSet(fs *flag.FlagSet) (*RunOptions, error) {
 		MapTileURI:     map_tile_uri,
 		ProtomapsTheme: protomaps_theme,
 		Port:           port,
+	}
+
+	if style != "" {
+
+		s, err := UnmarshalStyle(style)
+
+		if err != nil {
+			return nil, fmt.Errorf("Failed to unmarshal style, %w", err)
+		}
+
+		opts.Style = s
+	}
+
+	if point_style != "" {
+
+		s, err := UnmarshalStyle(point_style)
+
+		if err != nil {
+			return nil, fmt.Errorf("Failed to unmarshal point style, %w", err)
+		}
+
+		opts.PointStyle = s
 	}
 
 	features := make([]*geojson.Feature, 0)

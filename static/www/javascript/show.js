@@ -55,9 +55,6 @@ window.addEventListener("load", function load(event){
 
 		/*
 
-		pointToLayer: function (feature, latlng) {
-		    return L.circleMarker(latlng, geojsonMarkerOptions);
-		}
 
 		*/
 				
@@ -70,6 +67,14 @@ window.addEventListener("load", function load(event){
 
 		if (cfg.style){
 		    geojson_args.style = cfg.style;
+		}
+
+		if (cfg.point_style) {
+
+		    geojson_args.pointToLayer = function (feature, latlng) {
+			return L.circleMarker(latlng, cfg.point_style);
+		    }
+		    
 		}
 		
 		var geojson_layer = L.geoJSON(f, geojson_args);

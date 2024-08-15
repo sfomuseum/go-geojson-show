@@ -67,8 +67,10 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	//
 
 	map_cfg := &mapConfig{
-		Provider: opts.MapProvider,
-		TileURL:  opts.MapTileURI,
+		Provider:   opts.MapProvider,
+		TileURL:    opts.MapTileURI,
+		Style:      opts.Style,
+		PointStyle: opts.PointStyle,
 	}
 
 	if map_provider == "protomaps" {
