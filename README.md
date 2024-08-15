@@ -108,7 +108,7 @@ $> cat /usr/local/data/sfomuseum-data-architecture/data/102/527/513/102527513.ge
 
 ##### ...styles
 
-![](docs/images/go-geojson-show-protomaps-styles.png)
+![](docs/images/go-geojson-show-styles.png)
 
 ```
 $> ./bin/show \
@@ -120,7 +120,7 @@ $> ./bin/show \
 
 ##### ...labels
 
-![](docs/images/go-geojson-show-protomaps-label.png)
+![](docs/images/go-geojson-show-label.png)
 
 ```
 $> ./bin/show \
