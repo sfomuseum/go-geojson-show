@@ -6,6 +6,10 @@ Command-line tool for serving GeoJSON features from an on-demand web server.
 
 It's basically a simpler and dumber version of [geojson.io](https://geojson.io/) that you can run locally from a single binary application. Also, the option for custom, local and private tile data.
 
+## Documentation
+
+Documentation (`godoc`) is incomplete at this time.
+
 ## Tools
 
 ```
@@ -106,7 +110,7 @@ $> cat /usr/local/data/sfomuseum-data-architecture/data/102/527/513/102527513.ge
 2024/08/13 13:07:08 Features are viewable at http://localhost:63818
 ```
 
-##### ...styles
+##### Read a single GeoJSON file from disk and show it with a custom marker style
 
 ![](docs/images/go-geojson-show-styles.png)
 
@@ -118,7 +122,9 @@ $> ./bin/show \
 2024/08/15 16:15:37 Features are viewable at http://localhost:63516
 ```
 
-##### ...labels
+See [styles.go](styles.go) for details about the structure of the `LeafletStyle` struct used to encode custom map styles.
+
+##### Read a single GeoJSON file from disk and show it with custom labels when a marker is clicked
 
 ![](docs/images/go-geojson-show-label.png)
 
@@ -130,3 +136,5 @@ $> ./bin/show \
 	
 2024/08/15 16:12:39 Features are viewable at http://localhost:50310
 ```
+
+When a marker is clicked the application will scroll that feature's string representation (in the right-hand pane) in to view and highlight its text.
