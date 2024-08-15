@@ -21,6 +21,8 @@ Command-line tool for serving GeoJSON features from an on-demand web server.
 Usage:
 	 ./bin/show path(N) path(N)
 Valid options are:
+  -label value
+    	Zero or more (GeoJSON Feature) properties to use to construct a label for a feature's popup menu when it is clicked on.
   -map-provider string
     	Valid options are: leaflet, protomaps (default "leaflet")
   -map-tile-uri string
@@ -106,6 +108,8 @@ $> cat /usr/local/data/sfomuseum-data-architecture/data/102/527/513/102527513.ge
 
 ##### ...styles
 
+![](docs/images/go-geojson-show-protomaps-styles.png)
+
 ```
 $> ./bin/show \
 	-point-style '{"radius": 10, "color": "red", "fillColor": "orange" }' \
@@ -115,6 +119,8 @@ $> ./bin/show \
 ```
 
 ##### ...labels
+
+![](docs/images/go-geojson-show-protomaps-label.png)
 
 ```
 $> ./bin/show \
