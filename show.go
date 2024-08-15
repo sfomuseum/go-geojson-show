@@ -2,7 +2,6 @@ package show
 
 import (
 	"context"
-	"embed"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -18,6 +17,7 @@ import (
 
 	"github.com/paulmach/orb/geojson"
 	"github.com/pkg/browser"
+	"github.com/sfomuseum/go-geojson-show/static/www"
 	"github.com/sfomuseum/go-http-protomaps"
 	wasm_js "github.com/whosonfirst/go-whosonfirst-format-wasm/static/javascript"
 	"github.com/whosonfirst/go-whosonfirst-format-wasm/static/wasm"
@@ -25,31 +25,6 @@ import (
 
 const leaflet_osm_tile_url = "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
 const protomaps_api_tile_url string = "https://api.protomaps.com/tiles/v3/{z}/{x}/{y}.mvt?key={key}"
-
-//go:embed *.html
-var html_FS embed.FS
-
-//go:embed css/*
-var css_FS embed.FS
-
-//go:embed javascript/*.js javascript/*.map
-var js_FS embed.FS
-
-// mapConfig defines common configuration details for maps.
-type mapConfig struct {
-	// A valid map provider label.
-	Provider string `json:"provider"`
-	// A valid Leaflet tile layer URI.
-	TileURL string `json:"tile_url"`
-	// Optional Protomaps configuration details
-	Protomaps *protomapsConfig `json:"protomaps,omitempty"`
-}
-
-// protomapsConfig defines configuration details for maps using Protomaps.
-type protomapsConfig struct {
-	// A valid Protomaps theme label
-	Theme string `json:"theme"`
-}
 
 func Run(ctx context.Context) error {
 	fs := DefaultFlagSet()
@@ -71,13 +46,8 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 
 	mux := http.NewServeMux()
 
-	html_fs := http.FS(html_FS)
-	js_fs := http.FS(js_FS)
-	css_fs := http.FS(css_FS)
-
-	mux.Handle("/css/", http.FileServer(css_fs))
-	mux.Handle("/javascript/", http.FileServer(js_fs))
-	mux.Handle("/", http.FileServer(html_fs))
+	www_fs := http.FS(www.FS)
+	mux.Handle("/", http.FileServer(www_fs))
 
 	wasm_fs := http.FS(wasm.FS)
 	wasm_handler := http.FileServer(wasm_fs)

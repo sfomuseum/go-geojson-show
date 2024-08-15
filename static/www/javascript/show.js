@@ -3,7 +3,7 @@ window.addEventListener("load", function load(event){
     // Null Island
     var map = L.map('map').setView([0.0, 0.0], 12);
     
-    var init = function() {
+    var init = function(cfg) {
 	
 	fetch("/features.geojson")
 	    .then((rsp) => rsp.json())
@@ -19,7 +19,7 @@ window.addEventListener("load", function load(event){
 			wof_format(str).then((rsp) => {
 			    append(rsp);
 			}).catch((err) => {
-			    console.log("Unable to format feature", err, str);
+			    console.warn("Unable to format feature", err, str);
 			    append(str);
 			});
 		};
@@ -46,24 +46,33 @@ window.addEventListener("load", function load(event){
 			}
 			
 		    }).catch((err) => {
-			console.log("Unable to load wof_format.wasm", err);
+			console.warn("Unable to load wof_format.wasm", err);
 			var str_f = JSON.stringify(f, "", " ");		    
 			append(str_r);
 		    });
 		    
 		}
-		
-		var pt_handler = whosonfirst.spelunker.leaflet.handlers.point({});
-		
-		var poly_style = whosonfirst.spelunker.leaflet.styles.consensus_polygon();	    
-		// var lbl_style = whosonfirst.spelunker.leaflet.styles.label_centroid();
-		
+
+		/*
+
+		pointToLayer: function (feature, latlng) {
+		    return L.circleMarker(latlng, geojsonMarkerOptions);
+		}
+
+		*/
+				
 		var geojson_args = {
-		    style: poly_style,
-		    pointToLayer: pt_handler,		
+		    // pointToLayer: pt_handler,
+		    onEachFeature: function (feature, layer) {
+			layer.bindPopup("WOO");
+		    }
 		};
+
+		if (cfg.style){
+		    geojson_args.style = cfg.style;
+		}
 		
-		var geojson_layer = L.geoJSON(f);
+		var geojson_layer = L.geoJSON(f, geojson_args);
 		geojson_layer.addTo(map);
 		
 		var bounds = whosonfirst.spelunker.geojson.derive_bounds(f);
@@ -78,7 +87,7 @@ window.addEventListener("load", function load(event){
 		}
 		
 	    }).catch((err) => {
-		console.log("SAD", err);
+		console.error("Failed to render features", err);
 	    });
     };
 
@@ -111,14 +120,14 @@ window.addEventListener("load", function load(event){
 		    break;
 		    
 		default:
-		    console.log("Uknown or unsupported map provider");
+		    console.error("Uknown or unsupported map provider");
 		    return;
 	    }
 	    
-	    init();
+	    init(cfg);
 	    
 	}).catch((err) => {
-	    console.log("SAD", err);
+	    console.error("Failed to retrieve features", err);
 	});
     
 });
