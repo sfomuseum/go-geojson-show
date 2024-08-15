@@ -30,28 +30,28 @@ window.addEventListener("load", function load(event){
 		    raw_el.appendChild(pre);
 		};
 		
-		   if (raw_el){
-		   
-		   // Remember: Both sfomuseum.wasm.fetch and the WASM binary are imported and registered
-		   // in show.go. For details see: https://github.com/whosonfirst/go-whosonfirst-format-wasm
-		   
-		   sfomuseum.wasm.fetch("/wasm/wof_format.wasm").then(rsp => {
-		   
-		   var features = f.features;
-		   var count = features.length;
-		   
-		   for (var i=0; i < count; i++){
-		   var str_f = JSON.stringify(features[i], "", " ");		    			
-		   format(str_f);
-		   }
-		   
-		   }).catch((err) => {
-		   console.log("Unable to load wof_format.wasm", err);
-		   var str_f = JSON.stringify(f, "", " ");		    
-		   append(str_r);
-		   });
-		   
-		   }
+		if (raw_el){
+		    
+		    // Remember: Both sfomuseum.wasm.fetch and the WASM binary are imported and registered
+		    // in show.go. For details see: https://github.com/whosonfirst/go-whosonfirst-format-wasm
+		    
+		    sfomuseum.wasm.fetch("/wasm/wof_format.wasm").then(rsp => {
+			
+			var features = f.features;
+			var count = features.length;
+			
+			for (var i=0; i < count; i++){
+			    var str_f = JSON.stringify(features[i], "", " ");		    			
+			    format(str_f);
+			}
+			
+		    }).catch((err) => {
+			console.log("Unable to load wof_format.wasm", err);
+			var str_f = JSON.stringify(f, "", " ");		    
+			append(str_r);
+		    });
+		    
+		}
 		
 		var pt_handler = whosonfirst.spelunker.leaflet.handlers.point({});
 		
