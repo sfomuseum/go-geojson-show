@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"log/slog"
 	"net"
@@ -19,6 +20,7 @@ import (
 	"github.com/pkg/browser"
 	"github.com/sfomuseum/go-geojson-show/static/www"
 	"github.com/sfomuseum/go-http-protomaps"
+	"github.com/tidwall/gjson"
 	wasm_js "github.com/whosonfirst/go-whosonfirst-format-wasm/static/javascript"
 	"github.com/whosonfirst/go-whosonfirst-format-wasm/static/wasm"
 )
@@ -38,6 +40,86 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 	if err != nil {
 		return err
 	}
+
+	fs_uris := fs.Args()
+
+	features := make([]*geojson.Feature, 0)
+
+	append_features := func(r io.Reader) error {
+
+		body, err := io.ReadAll(r)
+
+		if err != nil {
+			return fmt.Errorf("Failed to read body, %w", err)
+		}
+
+		type_rsp := gjson.GetBytes(body, "type")
+
+		switch type_rsp.String() {
+		case "Feature":
+
+			f, err := geojson.UnmarshalFeature(body)
+
+			if err != nil {
+				return fmt.Errorf("Failed to unmarshal Feature, %w", err)
+			}
+
+			features = append(features, f)
+
+		case "FeatureCollection":
+
+			other_fc, err := geojson.UnmarshalFeatureCollection(body)
+
+			if err != nil {
+				return fmt.Errorf("Failed to unmarshal record as FeatureCollection, %w", err)
+			}
+
+			for _, f := range other_fc.Features {
+				features = append(features, f)
+			}
+
+		default:
+			return fmt.Errorf("Invalid type, %s", type_rsp.String())
+		}
+
+		return nil
+	}
+
+	stdin := false
+
+	if len(fs_uris) == 1 && fs_uris[0] == "-" {
+		stdin = true
+	}
+
+	if stdin {
+
+		err := append_features(os.Stdin)
+
+		if err != nil {
+			return fmt.Errorf("Failed to append features, %v", err)
+		}
+
+	} else {
+
+		for _, path := range fs_uris {
+
+			r, err := os.Open(path)
+
+			if err != nil {
+				return fmt.Errorf("Failed to open %s for reading, %v", path, err)
+			}
+
+			defer r.Close()
+
+			err = append_features(r)
+
+			if err != nil {
+				return fmt.Errorf("Failed to append features, %v", err)
+			}
+		}
+	}
+
+	opts.Features = features
 
 	return RunWithOptions(ctx, opts)
 }
