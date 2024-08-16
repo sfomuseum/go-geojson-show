@@ -143,7 +143,7 @@ When a marker is clicked the application will scroll that feature's string repre
 
 ### Using `go-geojson-show` as a package
 
-What follows is an annotated and abbreviated version of the code used by the [whosonfirst/wof-cli](https://github.com/whosonfirst/wof-cli?tab=readme-ov-file#wof-show) package to show features on a map using the `sfomuseum/go-geojson-show` package.
+What follows is an annotated and abbreviated version of the code used by the [whosonfirst/wof-cli](https://github.com/whosonfirst/wof-cli/blob/main/show/show.go) package to show features on a map using the `sfomuseum/go-geojson-show` package.
 
 _For the sake of brevity error handling has been omitted._
 
