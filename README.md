@@ -147,7 +147,7 @@ What follows is an annotated and abbreviated version of the code used by the [wh
 
 _For the sake of brevity error handling has been omitted._
 
-#### Parsing flags and deriving default "run options":
+#### Step 1: Parsing flags and deriving default "run options":
 
 The first step is to import any necessary packages including `github.com/sfomuseum/go-geojson-show` which is used to define a default flag set, parse command line arguments and then derive "run options" for the application.
 
@@ -174,7 +174,7 @@ func show(args []string) {
 	run_opts, _ := sfom_show.RunOptionsFromFlagSet(fs)
 ```
 
-#### Doing custom work work to derive a list of `geojson.Feature` records to display
+#### Step 2: Doing custom work to derive a list of `geojson.Feature` records to display
 
 This is custom code, specific to the `wof-cli` package. It defines a set of default properties to use for marker labels and supplements them with any new labels passed defined in the flagset / run options. Afterwards it derives one or more GeoJSON feature records, using its own internal logic, from paths defined on the command line.
 
@@ -216,7 +216,7 @@ This is custom code, specific to the `wof-cli` package. It defines a set of defa
 	uris.ExpandURIsWithCallback(ctx, cb, fs_uris...)
 ```
 
-#### Showing features on a map
+#### Step 3: Showing features on a map
 
 Finally, the run options are updated with the new list of features and the `RunWithOptions` method is invoked.
 
