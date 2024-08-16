@@ -3,6 +3,7 @@ module github.com/sfomuseum/go-geojson-show
 go 1.22.4
 
 require (
+	github.com/aaronland/go-roster v1.0.0
 	github.com/paulmach/orb v0.11.1
 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c
 	github.com/sfomuseum/go-flags v0.10.0

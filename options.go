@@ -1,6 +1,7 @@
 package show
 
 import (
+	"context"
 	"flag"
 	"fmt"
 
@@ -17,9 +18,10 @@ type RunOptions struct {
 	Style           *LeafletStyle
 	PointStyle      *LeafletStyle
 	LabelProperties []string
+	Browser         Browser
 }
 
-func RunOptionsFromFlagSet(fs *flag.FlagSet) (*RunOptions, error) {
+func RunOptionsFromFlagSet(ctx context.Context, fs *flag.FlagSet) (*RunOptions, error) {
 
 	flagset.Parse(fs)
 
@@ -30,6 +32,14 @@ func RunOptionsFromFlagSet(fs *flag.FlagSet) (*RunOptions, error) {
 		Port:            port,
 		LabelProperties: label_properties,
 	}
+
+	br, err := NewBrowser(ctx, "web://")
+
+	if err != nil {
+		return nil, fmt.Errorf("Failed to create new browser, %w", err)
+	}
+
+	opts.Browser = br
 
 	if style != "" {
 

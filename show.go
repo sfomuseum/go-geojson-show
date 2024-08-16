@@ -17,7 +17,7 @@ import (
 	"time"
 
 	"github.com/paulmach/orb/geojson"
-	"github.com/pkg/browser"
+	// "github.com/pkg/browser"
 	"github.com/sfomuseum/go-geojson-show/static/www"
 	"github.com/sfomuseum/go-http-protomaps"
 	"github.com/tidwall/gjson"
@@ -35,7 +35,7 @@ func Run(ctx context.Context) error {
 
 func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 
-	opts, err := RunOptionsFromFlagSet(fs)
+	opts, err := RunOptionsFromFlagSet(ctx, fs)
 
 	if err != nil {
 		return err
@@ -282,7 +282,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		}
 	}
 
-	err := browser.OpenURL(url)
+	err := opts.Browser.OpenURL(ctx, url)
 
 	if err != nil {
 		log.Fatalf("Failed to open URL %s, %v", url, err)
