@@ -8,6 +8,7 @@ import (
 	"strings"
 )
 
+// LeafletStyle is a struct containing details for decorating GeoJSON features and markers
 type LeafletStyle struct {
 	Color       string  `json:"color,omitempty"`
 	FillColor   string  `json:"fillColor,omitempty"`
@@ -17,6 +18,8 @@ type LeafletStyle struct {
 	FillOpacity float64 `json:"fillOpacity,omitempty"`
 }
 
+// UnmarshalStyle derives a `LeafletStyle` instance from 'raw'. If 'raw' starts with "{" then it is treated as
+// a JSON-encoded string, otherwise it is treated as a local path on disk.
 func UnmarshalStyle(raw string) (*LeafletStyle, error) {
 
 	raw = strings.TrimSpace(raw)
@@ -40,6 +43,7 @@ func UnmarshalStyle(raw string) (*LeafletStyle, error) {
 	return UnmarshalStyleFromReader(r)
 }
 
+// UnmarshalStyleFromString derives a `LeafletStyle` instance from 'raw'.
 func UnmarshalStyleFromString(raw string) (*LeafletStyle, error) {
 
 	var s *LeafletStyle
@@ -53,6 +57,7 @@ func UnmarshalStyleFromString(raw string) (*LeafletStyle, error) {
 	return s, nil
 }
 
+// UnmarshalStyleFromString derives a `LeafletStyle` instance from the body of 'r'.
 func UnmarshalStyleFromReader(r io.Reader) (*LeafletStyle, error) {
 
 	var s *LeafletStyle

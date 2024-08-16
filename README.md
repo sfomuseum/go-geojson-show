@@ -138,3 +138,92 @@ $> ./bin/show \
 ```
 
 When a marker is clicked the application will scroll that feature's string representation (in the right-hand pane) in to view and highlight its text.
+
+## Advanced usage
+
+### Using `go-geojson-show` as a package
+
+What follows is an annotated and abbreviated version of the code used by the [whosonfirst/wof-cli](https://github.com/whosonfirst/wof-cli?tab=readme-ov-file#wof-show) package to show features on a map using the `sfomuseum/go-geojson-show` package.
+
+_For the sake of brevity error handling has been omitted._
+
+#### Parsing flags and deriving default "run options":
+
+The first step is to import any necessary packages including `github.com/sfomuseum/go-geojson-show` which is used to define a default flag set, parse command line arguments and then derive "run options" for the application.
+
+```
+import (
+        "context"
+	"io"
+	"slices"
+
+	"github.com/paulmach/orb/geojson"
+	sfom_show "github.com/sfomuseum/go-geojson-show"
+	"github.com/whosonfirst/wof"
+	"github.com/whosonfirst/wof/reader"
+	"github.com/whosonfirst/wof/uris"	
+)
+
+func show(args []string) {
+
+	fs := sfom_show.DefaultFlagSet()
+	fs.Parse(args)
+
+	fs_uris := fs.Args()
+
+	run_opts, _ := sfom_show.RunOptionsFromFlagSet(fs)
+```
+
+#### Doing custom work work to derive a list of `geojson.Feature` records to display
+
+This is custom code, specific to the `wof-cli` package. It defines a set of default properties to use for marker labels and supplements them with any new labels passed defined in the flagset / run options. Afterwards it derives one or more GeoJSON feature records, using its own internal logic, from paths defined on the command line.
+
+```
+	label_props := []string{
+		"wof:name",
+		"wof:id",
+		"wof:placetype",
+		"src:geom",
+	}
+
+	for _, prop := range run_opts.LabelProperties {
+
+		if !slices.Contains(label_props, prop) {
+			label_props = append(label_props, prop)
+		}
+	}
+
+	run_opts.LabelProperties = label_props
+
+	fc := geojson.NewFeatureCollection()
+
+	cb := func(ctx context.Context, uri string) error {
+
+		r, is_stdin, _ := reader.ReadCloserFromURI(ctx, uri)
+
+		if !is_stdin {
+			defer r.Close()
+		}
+
+		body, _ := io.ReadAll(r)
+
+		f, _ := geojson.UnmarshalFeature(body)
+
+		fc.Append(f)
+		return nil
+	}
+
+	uris.ExpandURIsWithCallback(ctx, cb, fs_uris...)
+```
+
+#### Showing features on a map
+
+Finally, the run options are updated with the new list of features and the `RunWithOptions` method is invoked.
+
+```
+	run_opts.Features = fc.Features
+	return sfom_show.RunWithOptions(ctx, run_opts)
+}
+```
+
+That's it.
