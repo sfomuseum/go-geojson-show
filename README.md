@@ -171,7 +171,7 @@ func show(args []string) {
 
 	fs_uris := fs.Args()
 
-	run_opts, _ := sfom_show.RunOptionsFromFlagSet(fs)
+	run_opts, _ := sfom_show.RunOptionsFromFlagSet(ctx, fs)
 ```
 
 #### Step 2: Doing custom work to derive a list of `geojson.Feature` records to display
