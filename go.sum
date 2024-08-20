@@ -36,6 +36,8 @@ github.com/sfomuseum/go-http-protomaps v0.3.0 h1:e89s6wsDHyCXDgB6hFARMjsdrgn/lG4
 github.com/sfomuseum/go-http-protomaps v0.3.0/go.mod h1:K/PDDhy0c3xcPK2Bot7+oIz2l8QQLZys9SqAblhHT6I=
 github.com/sfomuseum/go-http-rollup v0.0.3 h1:N3CnjZluhzRhqPpdM+GTuzCnjM0V5xtPX+LeCgZWhTA=
 github.com/sfomuseum/go-http-rollup v0.0.3/go.mod h1:oJTnBzj3afHHYtHSuG2yDD459ctZHwy3zlKtbJl/BTQ=
+github.com/sfomuseum/go-www-show v1.0.0 h1:Q0vRdbCz2Ulqgut85vm0kRyO7FXPbO/gay5QMuWPqk8=
+github.com/sfomuseum/go-www-show v1.0.0/go.mod h1:P2RVABhL8JumRWLHXQ6AA8epIkBSTWAZ5LlL7zO07TE=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.6.1 h1:hDPOHmpOpP40lSULcqw7IrRb/u7w6RpDC9399XyoNd0=
 github.com/stretchr/testify v1.6.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
