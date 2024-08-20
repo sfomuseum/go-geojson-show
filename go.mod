@@ -1,6 +1,6 @@
 module github.com/sfomuseum/go-geojson-show
 
-go 1.22.4
+go 1.23.0
 
 require (
 	github.com/aaronland/go-roster v1.0.0
@@ -8,6 +8,7 @@ require (
 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c
 	github.com/sfomuseum/go-flags v0.10.0
 	github.com/sfomuseum/go-http-protomaps v0.3.0
+	github.com/sfomuseum/go-www-show v1.0.0
 	github.com/tidwall/gjson v1.17.3
 	github.com/whosonfirst/go-whosonfirst-format-wasm v0.0.1
 )
