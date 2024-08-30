@@ -7,6 +7,7 @@ import (
 
 	"github.com/paulmach/orb/geojson"
 	"github.com/sfomuseum/go-flags/flagset"
+	www_show "github.com/sfomuseum/go-www-show"
 )
 
 type RunOptions struct {
@@ -18,7 +19,7 @@ type RunOptions struct {
 	Style           *LeafletStyle
 	PointStyle      *LeafletStyle
 	LabelProperties []string
-	Browser         Browser
+	Browser         www_show.Browser
 }
 
 func RunOptionsFromFlagSet(ctx context.Context, fs *flag.FlagSet) (*RunOptions, error) {
@@ -33,7 +34,7 @@ func RunOptionsFromFlagSet(ctx context.Context, fs *flag.FlagSet) (*RunOptions, 
 		LabelProperties: label_properties,
 	}
 
-	br, err := NewBrowser(ctx, "web://")
+	br, err := www_show.NewBrowser(ctx, "web://")
 
 	if err != nil {
 		return nil, fmt.Errorf("Failed to create new browser, %w", err)
