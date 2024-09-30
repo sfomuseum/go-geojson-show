@@ -34,7 +34,7 @@ func RunOptionsFromFlagSet(ctx context.Context, fs *flag.FlagSet) (*RunOptions, 
 		LabelProperties: label_properties,
 	}
 
-	br, err := www_show.NewBrowser(ctx, "web://")
+	br, err := www_show.NewBrowser(ctx, browser_uri)
 
 	if err != nil {
 		return nil, fmt.Errorf("Failed to create new browser, %w", err)

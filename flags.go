@@ -11,6 +11,8 @@ import (
 
 var port int
 
+var browser_uri string
+
 var map_provider string
 var map_tile_uri string
 var protomaps_theme string
@@ -23,6 +25,8 @@ var label_properties multi.MultiString
 func DefaultFlagSet() *flag.FlagSet {
 
 	fs := flagset.NewFlagSet("show")
+
+	fs.StringVar(&browser_uri, "browser-uri", "web://", "A valid sfomuseum/go-www-show Browser URI.")
 
 	fs.StringVar(&map_provider, "map-provider", "leaflet", "Valid options are: leaflet, protomaps")
 	fs.StringVar(&map_tile_uri, "map-tile-uri", leaflet_osm_tile_url, "A valid Leaflet tile layer URI. See documentation for special-case (interpolated tile) URIs.")
