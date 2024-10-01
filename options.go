@@ -7,7 +7,7 @@ import (
 
 	"github.com/paulmach/orb/geojson"
 	"github.com/sfomuseum/go-flags/flagset"
-	www_show "github.com/sfomuseum/go-www-show"
+	www_show "github.com/sfomuseum/go-www-show/v2"
 )
 
 type RunOptions struct {

@@ -4,9 +4,11 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/sfomuseum/go-flags/flagset"
 	"github.com/sfomuseum/go-flags/multi"
+	"github.com/sfomuseum/go-www-show/v2"
 )
 
 var port int
@@ -26,7 +28,12 @@ func DefaultFlagSet() *flag.FlagSet {
 
 	fs := flagset.NewFlagSet("show")
 
-	fs.StringVar(&browser_uri, "browser-uri", "web://", "A valid sfomuseum/go-www-show Browser URI.")
+	browser_schemes := show.BrowserSchemes()
+	str_schemes := strings.Join(browser_schemes, ",")
+
+	browser_desc := fmt.Sprintf("A valid sfomuseum/go-www-show/v2.Browser URI. Valid options are: %s", str_schemes)
+
+	fs.StringVar(&browser_uri, "browser-uri", "web://", browser_desc)
 
 	fs.StringVar(&map_provider, "map-provider", "leaflet", "Valid options are: leaflet, protomaps")
 	fs.StringVar(&map_tile_uri, "map-tile-uri", leaflet_osm_tile_url, "A valid Leaflet tile layer URI. See documentation for special-case (interpolated tile) URIs.")
