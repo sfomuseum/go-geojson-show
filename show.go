@@ -16,7 +16,7 @@ import (
 	"github.com/paulmach/orb/geojson"
 	"github.com/sfomuseum/go-geojson-show/static/www"
 	"github.com/sfomuseum/go-http-protomaps"
-	www_show "github.com/sfomuseum/go-www-show"
+	www_show "github.com/sfomuseum/go-www-show/v2"
 	"github.com/tidwall/gjson"
 	wasm_js "github.com/whosonfirst/go-whosonfirst-format-wasm/static/javascript"
 	"github.com/whosonfirst/go-whosonfirst-format-wasm/static/wasm"

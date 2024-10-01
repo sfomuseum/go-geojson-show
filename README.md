@@ -17,6 +17,12 @@ $> make cli
 go build -mod vendor -ldflags="-s -w" -o bin/show cmd/show/main.go
 ```
 
+To enable use the [WebViewBrowser `Browser` implementation](https://github.com/sfomuseum/go-www-show?tab=readme-ov-file#webviewbrowser-webview) tools will need to be build with the `webview` tag set. For example:
+
+```
+$> go build -mod vendor -ldflags="-s -w" -tags webview -o bin/show cmd/show/main.go
+```
+
 ### show
 
 ```
@@ -25,6 +31,8 @@ Command-line tool for serving GeoJSON features from an on-demand web server.
 Usage:
 	 ./bin/show path(N) path(N)
 Valid options are:
+  -browser-uri string
+    	A valid sfomuseum/go-www-show/v2.Browser URI. Valid options are: web:// (default "web://")
   -label value
     	Zero or more (GeoJSON Feature) properties to use to construct a label for a feature's popup menu when it is clicked on.
   -map-provider string
