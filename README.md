@@ -6,6 +6,8 @@ Command-line tool for serving GeoJSON features from an on-demand web server.
 
 It's basically a simpler and dumber version of [geojson.io](https://geojson.io/) that you can run locally from a single binary application. Also, the option for custom, local and private tile data.
 
+Have a look at the [Small focused tools for visualizing geographic data](https://millsfield.sfomuseum.org/blog/2024/10/02/show/) blog post for more background.
+
 ## Documentation
 
 Documentation (`godoc`) is incomplete at this time.
