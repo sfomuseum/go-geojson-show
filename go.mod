@@ -6,8 +6,8 @@ require (
 	github.com/paulmach/orb v0.11.1
 	github.com/sfomuseum/go-flags v0.10.0
 	github.com/sfomuseum/go-http-protomaps v0.3.0
-	github.com/sfomuseum/go-www-show v1.0.0
-	github.com/tidwall/gjson v1.17.3
+	github.com/sfomuseum/go-www-show/v2 v2.0.0
+	github.com/tidwall/gjson v1.18.0
 	github.com/whosonfirst/go-whosonfirst-format-wasm v0.0.1
 )
 
@@ -22,6 +22,7 @@ require (
 	github.com/tdewolff/parse/v2 v2.7.14 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.0 // indirect
+	github.com/webview/webview_go v0.0.0-20240831120633-6173450d4dd6 // indirect
 	go.mongodb.org/mongo-driver v1.11.4 // indirect
 	golang.org/x/net v0.23.0 // indirect
 	golang.org/x/sys v0.18.0 // indirect
