@@ -24,6 +24,6 @@ require (
 	github.com/tidwall/pretty v1.2.0 // indirect
 	github.com/webview/webview_go v0.0.0-20240831120633-6173450d4dd6 // indirect
 	go.mongodb.org/mongo-driver v1.11.4 // indirect
-	golang.org/x/net v0.33.0 // indirect
-	golang.org/x/sys v0.28.0 // indirect
+	golang.org/x/net v0.36.0 // indirect
+	golang.org/x/sys v0.30.0 // indirect
 )
