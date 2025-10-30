@@ -12,7 +12,7 @@ window.addEventListener("load", function load(event){
 	if ("color_map" in style.custom){
 	    
 	    const color_map = style.custom.color_map;
-	    const prop = color_map.prop;
+	    const prop = color_map.property;
 	    
 	    if (prop in feature.properties){
 		
@@ -35,7 +35,7 @@ window.addEventListener("load", function load(event){
 	if ("fill_map" in style.custom){
 	    
 	    const fill_map = style.custom.fill_map;
-	    const prop = fill_map.prop;
+	    const prop = fill_map.property;
 	    
 	    if (feature.properties[prop]){
 		
@@ -60,7 +60,7 @@ window.addEventListener("load", function load(event){
 	if ("pane_map" in style.custom){
 
 	    const pane_map = style.custom.pane_map;
-	    const prop = pane_map.prop;
+	    const prop = pane_map.property;
 
 	    if (prop in feature.properties){
 
