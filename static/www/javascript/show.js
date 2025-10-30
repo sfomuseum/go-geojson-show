@@ -1,7 +1,7 @@
 window.addEventListener("load", function load(event){
 
     // Null Island
-    var map = L.map('map').setView([0.0, 0.0], 12);
+    const map = L.map('map').setView([0.0, 0.0], 12);
 
     const applyCustomStyles = function(feature, style){
 
@@ -240,8 +240,12 @@ window.addEventListener("load", function load(event){
 		}
 
 		var geojson_layer = L.geoJSON(f, geojson_args);
-		geojson_layer.addTo(map);
+		// geojson_layer.addTo(map);
 		
+		const markers = L.markerClusterGroup();
+		markers.addLayer(geojson_layer);
+		markers.addTo(map);
+	
 		var bounds = whosonfirst.spelunker.geojson.derive_bounds(f);
 		
 		var sw = bounds[0];
