@@ -25,6 +25,8 @@ var point_style string
 var label_properties multi.MultiString
 var panes multi.KeyValueInt64
 
+var cluster_markers bool
+
 var verbose bool
 
 func DefaultFlagSet() *flag.FlagSet {
@@ -48,6 +50,8 @@ func DefaultFlagSet() *flag.FlagSet {
 
 	fs.Var(&label_properties, "label", "Zero or more (GeoJSON Feature) properties to use to construct a label for a feature's popup menu when it is clicked on.")
 
+	fs.BoolVar(&cluster_markers, "cluster-markers", false, "Cluster markers that a proximate to one another.")
+	
 	fs.IntVar(&port, "port", 0, "The port number to listen for requests on (on localhost). If 0 then a random port number will be chosen.")
 	fs.BoolVar(&verbose, "verbose", false, "Enable verbose (debug) logging.")
 

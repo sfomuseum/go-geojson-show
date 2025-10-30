@@ -22,6 +22,7 @@ type RunOptions struct {
 	PointStyle      string // *LeafletStyle
 	LabelProperties []string
 	LeafletPanes    map[string]int
+	ClusterMarkers bool
 	Browser         www_show.Browser
 	Verbose         bool
 }
@@ -36,6 +37,7 @@ func RunOptionsFromFlagSet(ctx context.Context, fs *flag.FlagSet) (*RunOptions, 
 		ProtomapsTheme:  protomaps_theme,
 		Port:            port,
 		LabelProperties: label_properties,
+		ClusterMarkers: cluster_markers,
 		Verbose:         verbose,
 	}
 

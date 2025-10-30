@@ -149,6 +149,13 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		return fmt.Errorf("Failed to assign map config handler, %w", err)
 	}
 
+	local_cfg := &LocalConfig{
+		ClusterMarkers: opts.ClusterMarkers,
+	}
+
+	config_handler := LocalConfigHandler(local_cfg)
+	mux.Handle("/config.json", config_handler)
+
 	www_show_opts := &www_show.RunOptions{
 		Port:    opts.Port,
 		Browser: opts.Browser,
