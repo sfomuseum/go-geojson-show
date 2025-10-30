@@ -121,7 +121,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		slog.SetLogLoggerLevel(slog.LevelDebug)
 		slog.Debug("Verbose logging enabled")
 	}
-	
+
 	mux := http.NewServeMux()
 
 	www_fs := http.FS(www.FS)
@@ -134,12 +134,13 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	mux.Handle("/features.geojson", data_handler)
 
 	map_opts := &maps.AssignMapConfigHandlerOptions{
-		MapProvider:       opts.MapProvider,
-		MapTileURI:        opts.MapTileURI,
-		LeafletStyle:      opts.Style,
-		LeafletPointStyle: opts.PointStyle,
-		LeafletLabelProperties: opts.LabelProperties,		
-		ProtomapsTheme:    opts.ProtomapsTheme,
+		MapProvider:            opts.MapProvider,
+		MapTileURI:             opts.MapTileURI,
+		LeafletStyle:           opts.Style,
+		LeafletPointStyle:      opts.PointStyle,
+		LeafletLabelProperties: opts.LabelProperties,
+		LeafletPanes:           opts.LeafletPanes,
+		ProtomapsTheme:         opts.ProtomapsTheme,
 	}
 
 	err := maps.AssignMapConfigHandler(map_opts, mux, "/map.json")

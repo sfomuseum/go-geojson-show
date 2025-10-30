@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	
+
 	"github.com/paulmach/orb/geojson"
 	"github.com/sfomuseum/go-flags/flagset"
 	www_show "github.com/sfomuseum/go-www-show/v2"
@@ -21,8 +21,9 @@ type RunOptions struct {
 	Style           string // *LeafletStyle
 	PointStyle      string // *LeafletStyle
 	LabelProperties []string
+	LeafletPanes    map[string]int
 	Browser         www_show.Browser
-	Verbose bool
+	Verbose         bool
 }
 
 func RunOptionsFromFlagSet(ctx context.Context, fs *flag.FlagSet) (*RunOptions, error) {
@@ -35,7 +36,18 @@ func RunOptionsFromFlagSet(ctx context.Context, fs *flag.FlagSet) (*RunOptions, 
 		ProtomapsTheme:  protomaps_theme,
 		Port:            port,
 		LabelProperties: label_properties,
-		Verbose: verbose,
+		Verbose:         verbose,
+	}
+
+	if len(panes) > 0 {
+
+		leaflet_panes := make(map[string]int)
+
+		for _, fl := range panes {
+			leaflet_panes[fl.Key()] = int(fl.Value().(int64))
+		}
+
+		opts.LeafletPanes = leaflet_panes
 	}
 
 	br, err := www_show.NewBrowser(ctx, browser_uri)
@@ -48,7 +60,7 @@ func RunOptionsFromFlagSet(ctx context.Context, fs *flag.FlagSet) (*RunOptions, 
 
 	if style != "" {
 
-		if strings.HasPrefix(style, "{"){
+		if strings.HasPrefix(style, "{") {
 
 			body, err := os.ReadFile(style)
 
@@ -58,13 +70,13 @@ func RunOptionsFromFlagSet(ctx context.Context, fs *flag.FlagSet) (*RunOptions, 
 
 			style = string(body)
 		}
-		
+
 		opts.Style = style
 	}
 
 	if point_style != "" {
 
-		if strings.HasPrefix(point_style, "{"){
+		if strings.HasPrefix(point_style, "{") {
 
 			body, err := os.ReadFile(point_style)
 
@@ -74,7 +86,7 @@ func RunOptionsFromFlagSet(ctx context.Context, fs *flag.FlagSet) (*RunOptions, 
 
 			point_style = string(body)
 		}
-		
+
 		opts.PointStyle = point_style
 	}
 

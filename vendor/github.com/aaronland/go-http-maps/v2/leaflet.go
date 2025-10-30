@@ -16,7 +16,9 @@ type LeafletConfig struct {
 	// A `LeafletStyle` instance used to style Point geometries
 	PointStyle *LeafletStyle `json:"point_style,omitempty"`
 	// Zero or more (GeoJSON Feature) properties to use to construct a label for a feature's popup menu when it is clicked on.
-	LabelProperties []string `json:"label_properties"`
+	LabelProperties []string `json:"label_properties,omitempty"`
+	// A dictionary defining Leaflet label pane names and their z-index values.
+	Panes map[string]int `json:"panes,omitempty"`
 }
 
 // LeafletStyle is a struct containing details for decorating GeoJSON features and markers
@@ -28,7 +30,7 @@ type LeafletStyle struct {
 	Radius      float64 `json:"radius,omitempty"`
 	FillOpacity float64 `json:"fillOpacity,omitempty"`
 	// Custom flags for runtime style configuration
-	Custom      any     `json:"custom,omitempty"`
+	Custom any `json:"custom,omitempty"`
 }
 
 // UnmarshalLeafletStyle derives a `LeafletStyle` instance from 'raw'. If 'raw' starts with "{" then it is treated as

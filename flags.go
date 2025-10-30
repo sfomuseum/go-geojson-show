@@ -23,6 +23,7 @@ var style string
 var point_style string
 
 var label_properties multi.MultiString
+var panes multi.KeyValueInt64
 
 var verbose bool
 
@@ -43,12 +44,13 @@ func DefaultFlagSet() *flag.FlagSet {
 
 	fs.StringVar(&style, "style", "", "A custom Leaflet style definition for geometries. This may either be a JSON-encoded string or a path on disk.")
 	fs.StringVar(&point_style, "point-style", "", "A custom Leaflet style definition for point geometries. This may either be a JSON-encoded string or a path on disk.")
-	fs.IntVar(&port, "port", 0, "The port number to listen for requests on (on localhost). If 0 then a random port number will be chosen.")
+	fs.Var(&panes, "pane", "Zero or more {LABEL}={Z_INDEX} pairs used to define Leaflet pane information.")
 
 	fs.Var(&label_properties, "label", "Zero or more (GeoJSON Feature) properties to use to construct a label for a feature's popup menu when it is clicked on.")
 
+	fs.IntVar(&port, "port", 0, "The port number to listen for requests on (on localhost). If 0 then a random port number will be chosen.")
 	fs.BoolVar(&verbose, "verbose", false, "Enable verbose (debug) logging.")
-	
+
 	fs.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Command-line tool for serving GeoJSON features from an on-demand web server.\n")
 		fmt.Fprintf(os.Stderr, "Usage:\n\t %s path(N) path(N)\n", os.Args[0])

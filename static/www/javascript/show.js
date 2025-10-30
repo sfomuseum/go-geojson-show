@@ -5,12 +5,14 @@ window.addEventListener("load", function load(event){
 
     const applyCustomStyles = function(feature, style){
 
-	if (("custom" in style) && ("color_map" in style.custom)){
+	if (! "custom" in style){
+	    return style;
+	}
+	
+	if ("color_map" in style.custom){
 	    
 	    const color_map = style.custom.color_map;
 	    const prop = color_map.prop;
-	    
-	    console.log("COLOR", prop, feature.properties[prop]);
 	    
 	    if (prop in feature.properties){
 		
@@ -20,19 +22,17 @@ window.addEventListener("load", function load(event){
 		if (str_v in color_map.key){
 		    
 		    if ("color" in color_map.key[str_v]){
-			console.log("SET COLOR");
 			style.color = color_map.key[str_v]["color"];
 		    }
 		    
 		    if ("opacity" in color_map.key[v]){
-			console.log("SET OPACTITY");
 			style.opacity = color_map.key[v]["opacity"];
 		    }				    
 		}
 	    }
 	}
 	
-	if (("custom" in style) && ("fill_map" in style.custom)){
+	if ("fill_map" in style.custom){
 	    
 	    const fill_map = style.custom.fill_map;
 	    const prop = fill_map.prop;
@@ -54,8 +54,42 @@ window.addEventListener("load", function load(event){
 		    
 		}
 	    }
+	    
 	}
 	
+	if ("pane_map" in style.custom){
+
+	    const pane_map = style.custom.pane_map;
+	    const prop = pane_map.prop;
+
+	    if (prop in feature.properties){
+
+		const v = feature.properties[prop];
+		const str_v = String(v);
+
+		if (str_v in pane_map.key){
+		    
+		    const label = pane_map.key[str_v];
+		    
+		    if (map.getPane(label)){
+			// console.log("YES Assign feature to pane", label);			
+			style.pane = label;
+		    }
+		    
+		} else if ("*" in pane_map.key){
+
+		    const label = pane_map.key["*"];
+		    
+		    if (map.getPane(label)){
+			// console.log("YES Assign feature to pane", label);			
+			style.pane = label;
+		    }
+		} else {
+		    // pass
+		}
+	    }
+	}
+	    
 	return style;
     };
     
@@ -190,7 +224,9 @@ window.addEventListener("load", function load(event){
 		};
 
 		if ((cfg.leaflet) && (cfg.leaflet.style)){
-		    const style = applyCustomStyles(feature, cfg.leaflet.style);					    
+		    // This doesn't work because we don't know what feature is...
+		    // const style = applyCustomStyles(feature, cfg.leaflet.style);
+		    const style = cfg.leaflet.style;
 		    geojson_args.style = style;
 		}
 
@@ -253,6 +289,15 @@ window.addEventListener("load", function load(event){
 		default:
 		    console.error("Uknown or unsupported map provider");
 		    return;
+	    }
+
+	    if (("leaflet" in cfg) && ("panes" in cfg.leaflet)){
+
+		for (label in cfg.leaflet.panes){
+		    const p = map.createPane(label);
+		    p.style.zIndex = cfg.leaflet.panes.label;
+		    console.debug("Created pane", label, cfg.leaflet.panes.label);
+		}
 	    }
 	    
 	    init(cfg);
