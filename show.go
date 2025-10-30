@@ -6,20 +6,15 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"log"
 	"log/slog"
 	"net/http"
-	"net/url"
 	"os"
-	"strings"
 
+	"github.com/aaronland/go-http-maps/v2"
 	"github.com/paulmach/orb/geojson"
 	"github.com/sfomuseum/go-geojson-show/static/www"
-	"github.com/sfomuseum/go-http-protomaps"
 	www_show "github.com/sfomuseum/go-www-show/v2"
 	"github.com/tidwall/gjson"
-	wasm_js "github.com/whosonfirst/go-whosonfirst-format-wasm/static/javascript"
-	"github.com/whosonfirst/go-whosonfirst-format-wasm/static/wasm"
 )
 
 const leaflet_osm_tile_url = "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -128,64 +123,26 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	www_fs := http.FS(www.FS)
 	mux.Handle("/", http.FileServer(www_fs))
 
-	wasm_fs := http.FS(wasm.FS)
-	wasm_handler := http.FileServer(wasm_fs)
-
-	wasm_js_fs := http.FS(wasm_js.FS)
-	wasm_js_handler := http.FileServer(wasm_js_fs)
-
-	mux.Handle("/javascript/wasm/", http.StripPrefix("/javascript/wasm/", wasm_js_handler))
-	mux.Handle("/wasm/", http.StripPrefix("/wasm/", wasm_handler))
-
 	fc := geojson.NewFeatureCollection()
 	fc.Features = opts.Features
 	data_handler := dataHandler(fc)
 
 	mux.Handle("/features.geojson", data_handler)
 
-	//
-
-	map_cfg := &mapConfig{
-		Provider:        opts.MapProvider,
-		TileURL:         opts.MapTileURI,
-		Style:           opts.Style,
-		PointStyle:      opts.PointStyle,
-		LabelProperties: opts.LabelProperties,
+	map_opts := &maps.AssignMapConfigHandlerOptions{
+		MapProvider:       opts.MapProvider,
+		MapTileURI:        opts.MapTileURI,
+		LeafletStyle:      opts.Style,
+		LeafletPointStyle: opts.PointStyle,
+		ProtomapsTheme:    opts.ProtomapsTheme,
+		// LabelProperties: opts.LabelProperties,
 	}
 
-	if map_provider == "protomaps" {
+	err := maps.AssignMapConfigHandler(map_opts, mux, "/map.json")
 
-		u, err := url.Parse(opts.MapTileURI)
-
-		if err != nil {
-			log.Fatalf("Failed to parse Protomaps tile URL, %w", err)
-		}
-
-		switch u.Scheme {
-		case "file":
-
-			mux_url, mux_handler, err := protomaps.FileHandlerFromPath(u.Path, "")
-
-			if err != nil {
-				log.Fatalf("Failed to determine absolute path for '%s', %v", opts.MapTileURI, err)
-			}
-
-			mux.Handle(mux_url, mux_handler)
-			map_cfg.TileURL = mux_url
-
-		case "api":
-			key := u.Host
-			map_cfg.TileURL = strings.Replace(protomaps_api_tile_url, "{key}", key, 1)
-		}
-
-		map_cfg.Protomaps = &protomapsConfig{
-			Theme: opts.ProtomapsTheme,
-		}
+	if err != nil {
+		return fmt.Errorf("Failed to assign map config handler, %w", err)
 	}
-
-	map_cfg_handler := mapConfigHandler(map_cfg)
-
-	mux.Handle("/map.json", map_cfg_handler)
 
 	www_show_opts := &www_show.RunOptions{
 		Port:    opts.Port,

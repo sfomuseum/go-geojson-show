@@ -16,8 +16,8 @@ type RunOptions struct {
 	ProtomapsTheme  string
 	Port            int
 	Features        []*geojson.Feature
-	Style           *LeafletStyle
-	PointStyle      *LeafletStyle
+	Style           string // *LeafletStyle
+	PointStyle      string // *LeafletStyle
 	LabelProperties []string
 	Browser         www_show.Browser
 }
@@ -43,25 +43,25 @@ func RunOptionsFromFlagSet(ctx context.Context, fs *flag.FlagSet) (*RunOptions, 
 	opts.Browser = br
 
 	if style != "" {
+		/*
+			s, err := UnmarshalStyle(style)
 
-		s, err := UnmarshalStyle(style)
-
-		if err != nil {
-			return nil, fmt.Errorf("Failed to unmarshal style, %w", err)
-		}
-
-		opts.Style = s
+			if err != nil {
+				return nil, fmt.Errorf("Failed to unmarshal style, %w", err)
+			}
+		*/
+		opts.Style = style
 	}
 
 	if point_style != "" {
+		/*
+			s, err := UnmarshalStyle(point_style)
 
-		s, err := UnmarshalStyle(point_style)
-
-		if err != nil {
-			return nil, fmt.Errorf("Failed to unmarshal point style, %w", err)
-		}
-
-		opts.PointStyle = s
+			if err != nil {
+				return nil, fmt.Errorf("Failed to unmarshal point style, %w", err)
+			}
+		*/
+		opts.PointStyle = point_style
 	}
 
 	return opts, nil
