@@ -27,6 +27,8 @@ type LeafletStyle struct {
 	Opacity     float64 `json:"opacity,omitempty"`
 	Radius      float64 `json:"radius,omitempty"`
 	FillOpacity float64 `json:"fillOpacity,omitempty"`
+	// Custom flags for runtime style configuration
+	Custom      any     `json:"custom,omitempty"`
 }
 
 // UnmarshalLeafletStyle derives a `LeafletStyle` instance from 'raw'. If 'raw' starts with "{" then it is treated as

@@ -3,7 +3,63 @@ window.addEventListener("load", function load(event){
     // Null Island
     var map = L.map('map').setView([0.0, 0.0], 12);
 
-    var select = function(show_id){
+    const applyCustomStyles = function(feature, style){
+
+	if (("custom" in style) && ("color_map" in style.custom)){
+	    
+	    const color_map = style.custom.color_map;
+	    const prop = color_map.prop;
+	    
+	    console.log("COLOR", prop, feature.properties[prop]);
+	    
+	    if (prop in feature.properties){
+		
+		const v = feature.properties[prop];
+		const str_v = String(v);
+		
+		if (str_v in color_map.key){
+		    
+		    if ("color" in color_map.key[str_v]){
+			console.log("SET COLOR");
+			style.color = color_map.key[str_v]["color"];
+		    }
+		    
+		    if ("opacity" in color_map.key[v]){
+			console.log("SET OPACTITY");
+			style.opacity = color_map.key[v]["opacity"];
+		    }				    
+		}
+	    }
+	}
+	
+	if (("custom" in style) && ("fill_map" in style.custom)){
+	    
+	    const fill_map = style.custom.fill_map;
+	    const prop = fill_map.prop;
+	    
+	    if (feature.properties[prop]){
+		
+		const v = feature.properties[prop];
+		const str_v = String(v);
+		
+		if (str_v in fill_map.key){
+
+		    if ("color" in fill_map.key[v]){ 
+			style.fillColor = fill_map.key[v]["color"];
+		    }
+		    
+		    if ("opacity" in fill_map.key[v]){ 
+			style.fillOpacity = fill_map.key[v]["opacity"];
+		    }
+		    
+		}
+	    }
+	}
+	
+	return style;
+    };
+    
+    const select = function(show_id){
 
 	unselect();
 	
@@ -16,7 +72,7 @@ window.addEventListener("load", function load(event){
 	
     };
     
-    var unselect = function(){
+    const unselect = function(){
 	
 	var current = document.querySelector(".selected");
 	
@@ -29,7 +85,7 @@ window.addEventListener("load", function load(event){
 	unselect();
     });
     
-    var init = function(cfg) {
+    const init = function(cfg) {
 	
 	fetch("/features.geojson")
 	    .then((rsp) => rsp.json())
@@ -134,66 +190,14 @@ window.addEventListener("load", function load(event){
 		};
 
 		if ((cfg.leaflet) && (cfg.leaflet.style)){
-		    geojson_args.style = cfg.leaflet.style;
+		    const style = applyCustomStyles(feature, cfg.leaflet.style);					    
+		    geojson_args.style = style;
 		}
 
 		if ((cfg.leaflet) && (cfg.leaflet.point_style)){
 
 		    geojson_args.pointToLayer = function (feature, latlng) {
-
-			var style = cfg.leaflet.point_style;
-
-			console.log("PEW", style.custom);
-			
-			if ((style.custom) && (style.custom.color_map)){
-
-			    const color_map = style.custom.color_map;
-			    const prop = color_map.prop;
-
-			    console.log("COLOR", prop, feature.properties[prop]);
-			    
-			    if (feature.properties[prop]){
-
-				const v = feature.properties[prop];
-				
-				if (color_map.key[v]){
-
-				    if (color_map.key[v]["color"]){
-					console.log("SET COLOR");
-					style.color = color_map.key[v]["color"];
-				    }
-
-				    if (color_map.key[v]["opacity"]){
-					console.log("SET OPACTITY");
-					style.opacity = color_map.key[v]["opacity"];
-				    }				    
-				}
-			    }
-			}
-			
-			if ((style.custom) && (style.custom.fill_map)){
-
-			    const fill_map = style.custom.fill_map;
-			    const prop = fill_map.prop;
-			    
-			    if (feature.properties[prop]){
-
-				const v = feature.properties[prop];
-				
-				if (fill_map.key[v]){
-
-				    if (fill_map.key[v]["color"]){ 
-					style.fillColor = fill_map.key[v]["color"];
-				    }
-
-				    if (fill_map.key[v]["opacity"]){ 
-					style.fillOpacity = fill_map.key[v]["opacity"];
-				    }
-				    
-				}
-			    }
-			}
-			
+			const style = applyCustomStyles(feature, cfg.leaflet.point_style);			
 			return L.circleMarker(latlng, style);
 		    }
 		    

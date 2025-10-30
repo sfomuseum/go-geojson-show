@@ -3,7 +3,7 @@ module github.com/sfomuseum/go-geojson-show
 go 1.24.0
 
 require (
-	github.com/aaronland/go-http-maps/v2 v2.1.1
+	github.com/aaronland/go-http-maps/v2 v2.1.2
 	github.com/paulmach/orb v0.12.0
 	github.com/sfomuseum/go-flags v0.11.0
 	github.com/sfomuseum/go-www-show/v2 v2.0.0
