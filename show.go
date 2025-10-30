@@ -138,8 +138,8 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		MapTileURI:        opts.MapTileURI,
 		LeafletStyle:      opts.Style,
 		LeafletPointStyle: opts.PointStyle,
+		LeafletLabelProperties: opts.LabelProperties,		
 		ProtomapsTheme:    opts.ProtomapsTheme,
-		// LabelProperties: opts.LabelProperties,
 	}
 
 	err := maps.AssignMapConfigHandler(map_opts, mux, "/map.json")

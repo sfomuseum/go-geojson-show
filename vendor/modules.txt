@@ -1,12 +1,6 @@
-# github.com/aaronland/go-http-leaflet v0.5.0
-## explicit; go 1.22.4
-# github.com/aaronland/go-http-maps/v2 v2.0.0
+# github.com/aaronland/go-http-maps/v2 v2.1.0
 ## explicit; go 1.24.0
 github.com/aaronland/go-http-maps/v2
-# github.com/aaronland/go-http-rewrite v1.1.1
-## explicit; go 1.18
-# github.com/aaronland/go-http-static v0.0.4
-## explicit; go 1.22
 # github.com/aaronland/go-roster v1.0.0
 ## explicit; go 1.16
 github.com/aaronland/go-roster
@@ -21,17 +15,9 @@ github.com/pkg/browser
 ## explicit; go 1.22
 github.com/sfomuseum/go-flags/flagset
 github.com/sfomuseum/go-flags/multi
-# github.com/sfomuseum/go-http-protomaps v0.3.1
-## explicit; go 1.22.4
-# github.com/sfomuseum/go-http-rollup v0.0.3
-## explicit; go 1.22.4
 # github.com/sfomuseum/go-www-show/v2 v2.0.0
 ## explicit; go 1.23.0
 github.com/sfomuseum/go-www-show/v2
-# github.com/tdewolff/minify/v2 v2.20.32
-## explicit; go 1.18
-# github.com/tdewolff/parse/v2 v2.7.14
-## explicit; go 1.13
 # github.com/tidwall/gjson v1.18.0
 ## explicit; go 1.12
 github.com/tidwall/gjson
@@ -48,8 +34,6 @@ github.com/webview/webview_go/libs/mswebview2
 github.com/webview/webview_go/libs/mswebview2/include
 github.com/webview/webview_go/libs/webview
 github.com/webview/webview_go/libs/webview/include
-# github.com/whosonfirst/go-whosonfirst-format-wasm v0.0.1
-## explicit; go 1.21.0
 # go.mongodb.org/mongo-driver v1.11.4
 ## explicit; go 1.13
 go.mongodb.org/mongo-driver/bson
@@ -59,8 +43,7 @@ go.mongodb.org/mongo-driver/bson/bsonrw
 go.mongodb.org/mongo-driver/bson/bsontype
 go.mongodb.org/mongo-driver/bson/primitive
 go.mongodb.org/mongo-driver/x/bsonx/bsoncore
-# golang.org/x/net v0.33.0
-## explicit; go 1.18
-# golang.org/x/sys v0.28.0
-## explicit; go 1.18
+# golang.org/x/sys v0.1.0
+## explicit; go 1.17
+golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/windows

@@ -11,8 +11,12 @@ import (
 const LEAFLET_OSM_TILE_URL = "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
 
 type LeafletConfig struct {
-	Style      *LeafletStyle `json:"style,omitempty"`
+	// A `LeafletStyle` instance used to style geometries
+	Style *LeafletStyle `json:"style,omitempty"`
+	// A `LeafletStyle` instance used to style Point geometries
 	PointStyle *LeafletStyle `json:"point_style,omitempty"`
+	// Zero or more (GeoJSON Feature) properties to use to construct a label for a feature's popup menu when it is clicked on.
+	LabelProperties []string `json:"label_properties"`
 }
 
 // LeafletStyle is a struct containing details for decorating GeoJSON features and markers

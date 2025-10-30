@@ -34,6 +34,7 @@ import (
 
 	"github.com/aaronland/go-http-maps/v2"
 	"github.com/aaronland/go-http-maps/v2/static/www"
+	"github.com/sfomuseum/go-flags/multi"	
 )
 
 func main() {
@@ -56,8 +57,10 @@ func main() {
 	flag.StringVar(&map_provider, "map-provider", "leaflet", "Valid options are: leaflet, protomaps")
 	flag.StringVar(&map_tile_uri, "map-tile-uri", maps.LEAFLET_OSM_TILE_URL, "A valid Leaflet tile layer URI. See documentation for special-case (interpolated tile) URIs.")
 	flag.StringVar(&protomaps_theme, "protomaps-theme", "white", "A valid Protomaps theme label.")
-	flag.StringVar(&leaflet_style, "leaflet_style", "", "A custom Leaflet style definition for geometries. This may either be a JSON-encoded string or a path on disk.")
-	flag.StringVar(&leaflet_point_style, "leaflet_point_style", "", "A custom Leaflet style definition for points. This may either be a JSON-encoded string or a path on disk.")
+	flag.StringVar(&leaflet_style, "leaflet-style", "", "A custom Leaflet style definition for geometries. This may either be a JSON-encoded string or a path on disk.")
+	flag.StringVar(&leaflet_point_style, "leaflet-point-style", "", "A custom Leaflet style definition for points. This may either be a JSON-encoded string or a path on disk.")
+
+	flag.Var(&leaflet_label_properties, "leaflet-label-property", "Zero or more (GeoJSON Feature) properties to use to construct a label for a feature's popup menu when it is clicked on.")
 	flag.StringVar(&initial_view, "initial-view", "", "A comma-separated string indicating the map's initial view. Valid options are: 'LON,LAT', 'LON,LAT,ZOOM' or 'MINX,MINY,MAXX,MAXY'.")
 
 	flag.Parse()
@@ -70,12 +73,13 @@ func main() {
 	mux := http.NewServeMux()
 
 	opts := &maps.AssignMapConfigHandlerOptions{
-		MapProvider:       map_provider,
-		MapTileURI:        map_tile_uri,
-		InitialView:       initial_view,
-		LeafletStyle:      leaflet_style,
-		LeafletPointStyle: leaflet_point_style,
-		ProtomapsTheme:    protomaps_theme,
+		MapProvider:            map_provider,
+		MapTileURI:             map_tile_uri,
+		InitialView:            initial_view,
+		LeafletStyle:           leaflet_style,
+		LeafletPointStyle:      leaflet_point_style,
+		LeafletLabelProperties: leaflet_label_properties,
+		ProtomapsTheme:         protomaps_theme,	
 	}
 
 	maps.AssignMapConfigHandler(opts, mux, "/map.json")
