@@ -121,7 +121,6 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		slog.SetLogLoggerLevel(slog.LevelDebug)
 		slog.Debug("Verbose logging enabled")
 	}
-
 	mux := http.NewServeMux()
 
 	www_fs := http.FS(www.FS)
