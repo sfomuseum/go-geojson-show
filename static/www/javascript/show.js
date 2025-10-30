@@ -70,7 +70,7 @@ window.addEventListener("load", function load(event){
 		    // Remember: Both sfomuseum.wasm.fetch and the WASM binary are imported and registered
 		    // in show.go. For details see: https://github.com/whosonfirst/go-whosonfirst-format-wasm
 		    
-		    sfomuseum.wasm.fetch("/wasm/wof_format.wasm").then(rsp => {
+		    sfomuseum.golang.wasm.fetch("/wasm/wof_format.wasm").then(rsp => {
 			
 			var features = f.features;
 			var count = features.length;
@@ -102,29 +102,33 @@ window.addEventListener("load", function load(event){
 			    select(show_id);
 			});
 
-			var label_props = cfg.label_properties;
-
-			if (label_props){
-			    var count_props = label_props.length;
+			if (cfg.leaflet) {
 			    
-			    if (count_props > 0) {
+			    var label_props = cfg.leaflet.label_properties;
+			    
+			    if (label_props){
+				var count_props = label_props.length;
 				
-				var label_text = [];
-				
-				for (var i=0; i < count_props; i++){
+				if (count_props > 0) {
 				    
-				    var prop = label_props[i];
-				    var value = feature.properties[ prop ];
+				    var label_text = [];
 				    
-				    label_text.push("<strong>" + prop + "</strong> " + value);
+				    for (var i=0; i < count_props; i++){
+					
+					var prop = label_props[i];
+					var value = feature.properties[ prop ];
+					
+					label_text.push("<strong>" + prop + "</strong> " + value);
+				    }
+				    
+				    if (label_text.length > 0){ 
+					layer.bindPopup(label_text.join("<br />"));
+				    }
 				}
 				
-				if (label_text.length > 0){ 
-				    layer.bindPopup(label_text.join("<br />"));
-				}
 			    }
 			    
-			}
+			}			
 		    }
 		};
 
