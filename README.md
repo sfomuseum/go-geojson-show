@@ -41,6 +41,8 @@ Valid options are:
     	Valid options are: leaflet, protomaps (default "leaflet")
   -map-tile-uri string
     	A valid Leaflet tile layer URI. See documentation for special-case (interpolated tile) URIs. (default "https://tile.openstreetmap.org/{z}/{x}/{y}.png")
+  -pane value
+    	Zero or more {LABEL}={Z_INDEX} pairs used to define Leaflet pane information.
   -point-style string
     	A custom Leaflet style definition for point geometries. This may either be a JSON-encoded string or a path on disk.
   -port int
@@ -49,6 +51,8 @@ Valid options are:
     	A valid Protomaps theme label. (default "white")
   -style string
     	A custom Leaflet style definition for geometries. This may either be a JSON-encoded string or a path on disk.
+  -verbose
+    	Enable verbose (debug) logging.
 
 If the only path as input is "-" then data will be read from STDIN.
 ```
