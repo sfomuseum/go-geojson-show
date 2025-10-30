@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
-
+	
 	"github.com/paulmach/orb/geojson"
 	"github.com/sfomuseum/go-flags/flagset"
 	www_show "github.com/sfomuseum/go-www-show/v2"
@@ -18,8 +18,8 @@ type RunOptions struct {
 	ProtomapsTheme  string
 	Port            int
 	Features        []*geojson.Feature
-	Style           string // *LeafletStyle
-	PointStyle      string // *LeafletStyle
+	Style           string
+	PointStyle      string
 	LabelProperties []string
 	LeafletPanes    map[string]int
 	ClusterMarkers  bool
@@ -61,7 +61,8 @@ func RunOptionsFromFlagSet(ctx context.Context, fs *flag.FlagSet) (*RunOptions, 
 	opts.Browser = br
 
 	if style != "" {
-		if strings.HasPrefix(style, "{") {
+		
+		if !strings.HasPrefix(style, "{") {
 
 			body, err := os.ReadFile(style)
 
@@ -76,7 +77,8 @@ func RunOptionsFromFlagSet(ctx context.Context, fs *flag.FlagSet) (*RunOptions, 
 	}
 
 	if point_style != "" {
-		if strings.HasPrefix(point_style, "{") {
+		
+		if !strings.HasPrefix(point_style, "{") {
 
 			body, err := os.ReadFile(point_style)
 
