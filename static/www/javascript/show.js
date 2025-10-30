@@ -70,7 +70,7 @@ window.addEventListener("load", function load(event){
 		    // Remember: Both sfomuseum.wasm.fetch and the WASM binary are imported and registered
 		    // in show.go. For details see: https://github.com/whosonfirst/go-whosonfirst-format-wasm
 		    
-		    sfomuseum.wasm.fetch("/wasm/wof_format.wasm").then(rsp => {
+		    sfomuseum.golang.wasm.fetch("/wasm/wof_format.wasm").then(rsp => {
 			
 			var features = f.features;
 			var count = features.length;

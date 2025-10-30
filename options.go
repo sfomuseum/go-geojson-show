@@ -20,6 +20,7 @@ type RunOptions struct {
 	PointStyle      string // *LeafletStyle
 	LabelProperties []string
 	Browser         www_show.Browser
+	Verbose bool
 }
 
 func RunOptionsFromFlagSet(ctx context.Context, fs *flag.FlagSet) (*RunOptions, error) {
@@ -32,6 +33,7 @@ func RunOptionsFromFlagSet(ctx context.Context, fs *flag.FlagSet) (*RunOptions, 
 		ProtomapsTheme:  protomaps_theme,
 		Port:            port,
 		LabelProperties: label_properties,
+		Verbose: verbose,
 	}
 
 	br, err := www_show.NewBrowser(ctx, browser_uri)

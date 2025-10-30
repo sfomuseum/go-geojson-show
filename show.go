@@ -2,7 +2,6 @@ package show
 
 import (
 	"context"
-	"encoding/json"
 	"flag"
 	"fmt"
 	"io"
@@ -118,6 +117,11 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 
 func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 
+	if opts.Verbose {
+		slog.SetLogLoggerLevel(slog.LevelDebug)
+		slog.Debug("Verbose logging enabled")
+	}
+	
 	mux := http.NewServeMux()
 
 	www_fs := http.FS(www.FS)
@@ -166,26 +170,6 @@ func dataHandler(fc *geojson.FeatureCollection) http.Handler {
 
 		rsp.Header().Set("Content-type", "application/json")
 		rsp.Write(enc_json)
-		return
-	}
-
-	return http.HandlerFunc(fn)
-}
-
-func mapConfigHandler(cfg *mapConfig) http.Handler {
-
-	fn := func(rsp http.ResponseWriter, req *http.Request) {
-
-		rsp.Header().Set("Content-type", "application/json")
-
-		enc := json.NewEncoder(rsp)
-		err := enc.Encode(cfg)
-
-		if err != nil {
-			slog.Error("Failed to encode map config", "error", err)
-			http.Error(rsp, "Internal server error", http.StatusInternalServerError)
-		}
-
 		return
 	}
 

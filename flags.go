@@ -24,6 +24,8 @@ var point_style string
 
 var label_properties multi.MultiString
 
+var verbose bool
+
 func DefaultFlagSet() *flag.FlagSet {
 
 	fs := flagset.NewFlagSet("show")
@@ -45,6 +47,8 @@ func DefaultFlagSet() *flag.FlagSet {
 
 	fs.Var(&label_properties, "label", "Zero or more (GeoJSON Feature) properties to use to construct a label for a feature's popup menu when it is clicked on.")
 
+	fs.BoolVar(&verbose, "verbose", false, "Enable verbose (debug) logging.")
+	
 	fs.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Command-line tool for serving GeoJSON features from an on-demand web server.\n")
 		fmt.Fprintf(os.Stderr, "Usage:\n\t %s path(N) path(N)\n", os.Args[0])
