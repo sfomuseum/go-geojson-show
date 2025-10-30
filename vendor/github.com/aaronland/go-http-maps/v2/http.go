@@ -138,7 +138,7 @@ func AssignMapConfigHandler(opts *AssignMapConfigHandlerOptions, mux *http.Serve
 	switch opts.MapProvider {
 	case "leaflet":
 
-		if opts.LeafletStyle != "" && opts.LeafletPointStyle != "" {
+		if opts.LeafletStyle != "" || opts.LeafletPointStyle != "" {
 
 			leaflet_cfg := &LeafletConfig{}
 
@@ -162,7 +162,6 @@ func AssignMapConfigHandler(opts *AssignMapConfigHandlerOptions, mux *http.Serve
 				}
 
 				leaflet_cfg.PointStyle = s
-
 			}
 
 			map_cfg.Leaflet = leaflet_cfg

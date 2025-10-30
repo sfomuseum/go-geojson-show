@@ -95,6 +95,7 @@ window.addEventListener("load", function load(event){
 		}
 
 		var geojson_args = {
+		    
 		    onEachFeature: function (feature, layer) {
 
 			layer.on("click", function(e){			    
@@ -132,14 +133,68 @@ window.addEventListener("load", function load(event){
 		    }
 		};
 
-		if (cfg.style){
-		    geojson_args.style = cfg.style;
+		if ((cfg.leaflet) && (cfg.leaflet.style)){
+		    geojson_args.style = cfg.leaflet.style;
 		}
 
-		if (cfg.point_style) {
+		if ((cfg.leaflet) && (cfg.leaflet.point_style)){
 
 		    geojson_args.pointToLayer = function (feature, latlng) {
-			return L.circleMarker(latlng, cfg.point_style);
+
+			var style = cfg.leaflet.point_style;
+
+			console.log("PEW", style.custom);
+			
+			if ((style.custom) && (style.custom.color_map)){
+
+			    const color_map = style.custom.color_map;
+			    const prop = color_map.prop;
+
+			    console.log("COLOR", prop, feature.properties[prop]);
+			    
+			    if (feature.properties[prop]){
+
+				const v = feature.properties[prop];
+				
+				if (color_map.key[v]){
+
+				    if (color_map.key[v]["color"]){
+					console.log("SET COLOR");
+					style.color = color_map.key[v]["color"];
+				    }
+
+				    if (color_map.key[v]["opacity"]){
+					console.log("SET OPACTITY");
+					style.opacity = color_map.key[v]["opacity"];
+				    }				    
+				}
+			    }
+			}
+			
+			if ((style.custom) && (style.custom.fill_map)){
+
+			    const fill_map = style.custom.fill_map;
+			    const prop = fill_map.prop;
+			    
+			    if (feature.properties[prop]){
+
+				const v = feature.properties[prop];
+				
+				if (fill_map.key[v]){
+
+				    if (fill_map.key[v]["color"]){ 
+					style.fillColor = fill_map.key[v]["color"];
+				    }
+
+				    if (fill_map.key[v]["opacity"]){ 
+					style.fillOpacity = fill_map.key[v]["opacity"];
+				    }
+				    
+				}
+			    }
+			}
+			
+			return L.circleMarker(latlng, style);
 		    }
 		    
 		}
