@@ -292,6 +292,7 @@ window.addEventListener("load", function load(event){
 			var pm_args = {
 			    url: tile_url,
 			    theme: map_cfg.protomaps.theme,
+			    flavor: map_cfg.protomaps.theme,
 			};
 			
 			if ("max_data_zoom" in map_cfg.protomaps){
