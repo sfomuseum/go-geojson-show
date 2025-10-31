@@ -1,20 +1,31 @@
 package show
 
-// mapConfig defines common configuration details for maps.
-type mapConfig struct {
-	// A valid map provider label.
-	Provider string `json:"provider"`
-	// A valid Leaflet tile layer URI.
-	TileURL string `json:"tile_url"`
-	// Optional Protomaps configuration details
-	Protomaps       *protomapsConfig `json:"protomaps,omitempty"`
-	Style           *LeafletStyle    `json:"style,omitempty"`
-	PointStyle      *LeafletStyle    `json:"point_style,omitempty"`
-	LabelProperties []string         `json:"label_properties"`
+import (
+	"encoding/json"
+	"net/http"
+)
+
+// LocalConfig defines application-specific configuration details.
+type LocalConfig struct {
+	// Cluster markers that a proximate to one another.
+	ClusterMarkers bool `json:"cluster_markers"`
 }
 
-// protomapsConfig defines configuration details for maps using Protomaps.
-type protomapsConfig struct {
-	// A valid Protomaps theme label
-	Theme string `json:"theme"`
+// LocalConfigHandler returns an `http.Handler` instance that when called will return 'cfg' as a JSON-encoded string.
+func LocalConfigHandler(cfg *LocalConfig) http.Handler {
+
+	fn := func(rsp http.ResponseWriter, req *http.Request) {
+
+		rsp.Header().Set("Content-type", "application/json")
+
+		enc := json.NewEncoder(rsp)
+		err := enc.Encode(cfg)
+
+		if err != nil {
+			http.Error(rsp, "Internal server error", http.StatusInternalServerError)
+			return
+		}
+	}
+
+	return http.HandlerFunc(fn)
 }

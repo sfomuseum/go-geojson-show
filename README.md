@@ -35,12 +35,16 @@ Usage:
 Valid options are:
   -browser-uri string
     	A valid sfomuseum/go-www-show/v2.Browser URI. Valid options are: web:// (default "web://")
+  -cluster-markers
+    	Cluster markers that a proximate to one another.
   -label value
     	Zero or more (GeoJSON Feature) properties to use to construct a label for a feature's popup menu when it is clicked on.
   -map-provider string
     	Valid options are: leaflet, protomaps (default "leaflet")
   -map-tile-uri string
     	A valid Leaflet tile layer URI. See documentation for special-case (interpolated tile) URIs. (default "https://tile.openstreetmap.org/{z}/{x}/{y}.png")
+  -pane value
+    	Zero or more {LABEL}={Z_INDEX} pairs used to define Leaflet pane information.
   -point-style string
     	A custom Leaflet style definition for point geometries. This may either be a JSON-encoded string or a path on disk.
   -port int
@@ -49,6 +53,8 @@ Valid options are:
     	A valid Protomaps theme label. (default "white")
   -style string
     	A custom Leaflet style definition for geometries. This may either be a JSON-encoded string or a path on disk.
+  -verbose
+    	Enable verbose (debug) logging.
 
 If the only path as input is "-" then data will be read from STDIN.
 ```
@@ -148,6 +154,74 @@ $> ./bin/show \
 ```
 
 When a marker is clicked the application will scroll that feature's string representation (in the right-hand pane) in to view and highlight its text.
+
+##### Read a single GeoJSON file from disk and cluster the markers
+
+![](docs/images/go-geojson-show-cluster.png)
+
+```
+$> ./bin/show \
+	-cluster-markers \
+	/usr/local/data/sfomuseum-data-publicart/work/publicart-all.geojson | 
+
+2025/10/30 15:46:37 INFO Server is ready and features are viewable url=http://localhost:53596
+```
+
+##### Read a single GeoJSON file from disk and apply per-property styles
+
+![](docs/images/go-geojson-show-style-json.png)
+
+```
+$> ./bin/show \
+	-label wof:name \
+	-label sfo:level \
+	-label mz:is_current \
+	-label edtf:inception \
+	-label edtf:cessation \
+	-pane is_current=1000 \
+	-pane not_current=500 \
+	-point-style styles.json \	
+	/usr/local/data/sfomuseum-data-publicart/work/publicart-all.geojson
+
+2025/10/30 15:50:01 INFO Server is ready and features are viewable url=http://localhost:53610
+```
+
+Aside from the `-label` flags (described above) this example exposes two other flags:
+
+* `-pane` which is used to define Leaflet map panes where GeoJSON features should be created.
+* `-point-style` which was discussed above but references a file with _custom_ style/layer configuration details that will be applied based on the presence and values of specific properties for each feature. These values will override any default style properties. For example:
+
+```
+{
+    "radius": 10,
+    "color": "red",
+    "fillColor": "orange",
+    "custom": {
+	"pane_map": {
+	    "property": "mz:is_current",
+	    "key": {
+		"1": "is_current",
+		"*": "not_current"
+	    }
+	},
+	"fill_map": {
+	    "property": "sfo:level",
+	    "key": {
+		"1": { "color": "orange", "opacity": 0.5 },
+		"2": { "color": "blue", "opacity": 0.5 },
+		"3": { "color": "green", "opacity": 0.5 } }
+	},
+	"color_map": {
+	    "property": "mz:is_current",
+	    "key": {
+		"-1": { "color": "#ccc", "opacity": 1 },
+		"1": { "color": "white", "opacity": 1 },
+		"0": { "color": "#000", "opacity": 1 }
+	    }
+	}
+    }
+}
+```
 
 ## Advanced usage
 

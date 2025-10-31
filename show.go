@@ -121,7 +121,6 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		slog.SetLogLoggerLevel(slog.LevelDebug)
 		slog.Debug("Verbose logging enabled")
 	}
-	
 	mux := http.NewServeMux()
 
 	www_fs := http.FS(www.FS)
@@ -134,12 +133,13 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	mux.Handle("/features.geojson", data_handler)
 
 	map_opts := &maps.AssignMapConfigHandlerOptions{
-		MapProvider:       opts.MapProvider,
-		MapTileURI:        opts.MapTileURI,
-		LeafletStyle:      opts.Style,
-		LeafletPointStyle: opts.PointStyle,
-		LeafletLabelProperties: opts.LabelProperties,		
-		ProtomapsTheme:    opts.ProtomapsTheme,
+		MapProvider:            opts.MapProvider,
+		MapTileURI:             opts.MapTileURI,
+		LeafletStyle:           opts.Style,
+		LeafletPointStyle:      opts.PointStyle,
+		LeafletLabelProperties: opts.LabelProperties,
+		LeafletPanes:           opts.LeafletPanes,
+		ProtomapsTheme:         opts.ProtomapsTheme,
 	}
 
 	err := maps.AssignMapConfigHandler(map_opts, mux, "/map.json")
@@ -147,6 +147,13 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	if err != nil {
 		return fmt.Errorf("Failed to assign map config handler, %w", err)
 	}
+
+	local_cfg := &LocalConfig{
+		ClusterMarkers: opts.ClusterMarkers,
+	}
+
+	config_handler := LocalConfigHandler(local_cfg)
+	mux.Handle("/config.json", config_handler)
 
 	www_show_opts := &www_show.RunOptions{
 		Port:    opts.Port,

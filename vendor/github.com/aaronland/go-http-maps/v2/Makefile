@@ -5,6 +5,8 @@ INITIAL_VIEW=-122.384292,37.621131,13
 
 example:
 	go run cmd/example/main.go \
+		-leaflet-pane hello=100 \
+		-leaflet-pane world=200 \
 		-initial-view '$(INITIAL_VIEW)'
 
 example-protomaps:

@@ -1,5 +1,5 @@
-github.com/aaronland/go-http-maps/v2 v2.1.0 h1:VgE7qzIuCANA8WpXxV+6p36sDT4u39LNIepJYeXTNEo=
-github.com/aaronland/go-http-maps/v2 v2.1.0/go.mod h1:2iK8mL62rgujrLUa3Thq45G5z6eY6ym8OSNKfEvRiDQ=
+github.com/aaronland/go-http-maps/v2 v2.2.0 h1:4qEhrmlKcQL+OVdoT+QvGGaaXcpjhlTP/D4H9ez1T2k=
+github.com/aaronland/go-http-maps/v2 v2.2.0/go.mod h1:2iK8mL62rgujrLUa3Thq45G5z6eY6ym8OSNKfEvRiDQ=
 github.com/aaronland/go-roster v1.0.0 h1:FRDGrTqsYySKjWnAhbBGXyeGlI/o5/t9FZYCbUmyQtI=
 github.com/aaronland/go-roster v1.0.0/go.mod h1:KIsYZgrJlAsyb9LsXSCvlqvbcCBVjCSqcQiZx42i9ro=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
