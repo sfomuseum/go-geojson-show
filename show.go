@@ -140,6 +140,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		LeafletLabelProperties: opts.LabelProperties,
 		LeafletPanes:           opts.LeafletPanes,
 		ProtomapsTheme:         opts.ProtomapsTheme,
+		ProtomapsMaxDataZoom:         opts.ProtomapsMaxDataZoom,		
 	}
 
 	err := maps.AssignMapConfigHandler(map_opts, mux, "/map.json")

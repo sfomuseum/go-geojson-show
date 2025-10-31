@@ -18,6 +18,7 @@ var browser_uri string
 var map_provider string
 var map_tile_uri string
 var protomaps_theme string
+var protomaps_max_data_zoom int
 
 var style string
 var point_style string
@@ -43,7 +44,8 @@ func DefaultFlagSet() *flag.FlagSet {
 	fs.StringVar(&map_provider, "map-provider", "leaflet", "Valid options are: leaflet, protomaps")
 	fs.StringVar(&map_tile_uri, "map-tile-uri", leaflet_osm_tile_url, "A valid Leaflet tile layer URI. See documentation for special-case (interpolated tile) URIs.")
 	fs.StringVar(&protomaps_theme, "protomaps-theme", "white", "A valid Protomaps theme label.")
-
+	fs.IntVar(&protomaps_max_data_zoom, "protomaps-max-data-zoom", 0, "The maximum zoom (tile) level for data in a PMTiles database. Necessary for \"over-zooming\".")
+	
 	fs.StringVar(&style, "style", "", "A custom Leaflet style definition for geometries. This may either be a JSON-encoded string or a path on disk.")
 	fs.StringVar(&point_style, "point-style", "", "A custom Leaflet style definition for point geometries. This may either be a JSON-encoded string or a path on disk.")
 	fs.Var(&panes, "pane", "Zero or more {LABEL}={Z_INDEX} pairs used to define Leaflet pane information.")

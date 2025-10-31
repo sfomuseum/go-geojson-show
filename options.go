@@ -16,6 +16,7 @@ type RunOptions struct {
 	MapProvider     string
 	MapTileURI      string
 	ProtomapsTheme  string
+	ProtomapsMaxDataZoom int
 	Port            int
 	Features        []*geojson.Feature
 	Style           string
@@ -35,6 +36,7 @@ func RunOptionsFromFlagSet(ctx context.Context, fs *flag.FlagSet) (*RunOptions, 
 		MapProvider:     map_provider,
 		MapTileURI:      map_tile_uri,
 		ProtomapsTheme:  protomaps_theme,
+		ProtomapsMaxDataZoom: protomaps_max_data_zoom,
 		Port:            port,
 		LabelProperties: label_properties,
 		ClusterMarkers:  cluster_markers,

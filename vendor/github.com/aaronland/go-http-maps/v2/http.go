@@ -49,6 +49,8 @@ type AssignMapConfigHandlerOptions struct {
 	LeafletPanes map[string]int
 	// A valid Protomaps theme label.
 	ProtomapsTheme string
+	// MaxDataZoom is the maximum zoom (tile) level for data in a PMTiles database
+	ProtomapsMaxDataZoom int
 }
 
 // AssignMapConfigHandler derives a new `MapConfig` and corresponding `http.Handler` instance from 'opts' assigning
@@ -196,6 +198,10 @@ func AssignMapConfigHandler(opts *AssignMapConfigHandlerOptions, mux *http.Serve
 
 		map_cfg.Protomaps = &ProtomapsConfig{
 			Theme: opts.ProtomapsTheme,
+		}
+
+		if opts.ProtomapsMaxDataZoom > 0 {
+			map_cfg.Protomaps.MaxDataZoom = opts.ProtomapsMaxDataZoom
 		}
 	}
 
