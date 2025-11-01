@@ -13,4 +13,5 @@ example-protomaps:
 	go run cmd/example/main.go \
 		-initial-view '$(INITIAL_VIEW)' \
 		-map-provider protomaps \
+		-protomaps-max-data-zoom 14 \
 		-map-tile-uri 'file://$(CWD)/fixtures/sfo.pmtiles'

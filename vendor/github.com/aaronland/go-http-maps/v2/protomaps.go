@@ -12,6 +12,8 @@ const PROTOMAPS_API_TILE_URL = "https://api.protomaps.com/tiles/v3/{z}/{x}/{y}.m
 type ProtomapsConfig struct {
 	// A valid Protomaps theme label
 	Theme string `json:"theme"`
+	// MaxDataZoom is the maximum zoom (tile) level for data in a PMTiles database
+	MaxDataZoom int `json:"max_data_zoom,omitempty"`
 }
 
 // ProtomapsFileHandlerFromPath will take a path and create a http.FileServer handler
