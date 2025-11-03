@@ -20,6 +20,8 @@ var map_tile_uri string
 var protomaps_theme string
 var protomaps_max_data_zoom int
 
+var esri_feature_layers multi.MultiString
+
 var style string
 var point_style string
 
@@ -45,6 +47,8 @@ func DefaultFlagSet() *flag.FlagSet {
 	fs.StringVar(&map_tile_uri, "map-tile-uri", leaflet_osm_tile_url, "A valid Leaflet tile layer URI. See documentation for special-case (interpolated tile) URIs.")
 	fs.StringVar(&protomaps_theme, "protomaps-theme", "white", "A valid Protomaps theme label.")
 	fs.IntVar(&protomaps_max_data_zoom, "protomaps-max-data-zoom", 0, "The maximum zoom (tile) level for data in a PMTiles database. Necessary for \"over-zooming\".")
+
+	fs.Var(&esri_feature_layers, "esri-feature-layer", "...")
 	
 	fs.StringVar(&style, "style", "", "A custom Leaflet style definition for geometries. This may either be a JSON-encoded string or a path on disk.")
 	fs.StringVar(&point_style, "point-style", "", "A custom Leaflet style definition for point geometries. This may either be a JSON-encoded string or a path on disk.")

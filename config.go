@@ -9,6 +9,7 @@ import (
 type LocalConfig struct {
 	// Cluster markers that a proximate to one another.
 	ClusterMarkers bool `json:"cluster_markers"`
+	ESRIFeatureLayers []string `json:"esri_feature_layers"`
 }
 
 // LocalConfigHandler returns an `http.Handler` instance that when called will return 'cfg' as a JSON-encoded string.

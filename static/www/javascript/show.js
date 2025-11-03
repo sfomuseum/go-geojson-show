@@ -286,40 +286,59 @@ window.addEventListener("load", function load(event){
 			break;
 
 		    case "esri":
+
+			const layers = local_cfg.esri_feature_layers;
+			const count_layers = layers.length;
 			
-			tile_layer = L.esri.featureLayer( { 
-			    url: map_cfg.tile_url,
-			    style: {
+			for (var i=0; i < count_layers; i++){
+
+			    var tile_uri = layers[i];
+			    
+			    var tile_style = {
 				color: '#000',
 				weight: 1,
 				opacity: 1,
+				fillColor: '#fff',
 				fillOpacity: 0,
-			    },
-			    pointToLayer: function(feature, latlng) {
-				return L.circleMarker(latlng, {
-				    radius: 8,
-				    fillColor: "#ff0000",
-				    color: "#fff",
-				    weight: 1,
-				    opacity: 1,
-				    fillOpacity: 0.1
-				});
+			    };
+
+			    const tile_u = new URL(tile_uri);
+			    const tile_q = tile_u.searchParams;
+
+			    for (k in tile_style){
+				
+				var q_key = "_" + k;
+				
+				if (tile_q.has(q_key)){
+				    tile_style[k] = tile_q.get(q_key);
+				    tile_q.delete(q_key);
+				}
 			    }
-			});
 
-			tile_layer.on('load', function(l) {
-			    console.debug('ESRI Feature layer loaded', l);
-			});
-			
-			tile_layer.on('error', function(e) {
-			    console.error('ESRI Feature layer error:', e);
-			});
+			    tile_u.searchParams = tile_q;
+			    tile_uri = tile_u.toString();
 
-			tile_layer.on('add', function(l) {
-			    console.debug('ESRI Feature layer added to map', l);
-			});
+			    var tile_args {
+				url: tile_uri,
+				style: tile_style,
+				/*
+				pointToLayer: function(feature, latlng) {
+				    return L.circleMarker(latlng, {
+					radius: 8,
+					fillColor: "#ff0000",
+					color: "#fff",
+					weight: 1,
+					opacity: 1,
+					fillOpacity: 0.1
+				    });
+				}
+				*/
+			    };
+			    
+			    var tile_layer = L.esri.featureLayer(tile_args);
+			    tile_layer.addTo(map);
+			}
 			
-			tile_layer.addTo(map);
 			break;
 			
 		    case "protomaps":		    
