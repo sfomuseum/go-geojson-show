@@ -286,13 +286,14 @@ window.addEventListener("load", function load(event){
 			break;
 
 		    case "esri":
-
+			
 			tile_layer = L.esri.featureLayer( { 
 			    url: map_cfg.tile_url,
 			    style: {
 				color: '#000',
 				weight: 1,
-				opacity: 1
+				opacity: 1,
+				fillOpacity: 0,
 			    },
 			    pointToLayer: function(feature, latlng) {
 				return L.circleMarker(latlng, {
