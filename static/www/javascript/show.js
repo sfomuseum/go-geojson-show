@@ -284,6 +284,42 @@ window.addEventListener("load", function load(event){
 			
 			tile_layer.addTo(map);
 			break;
+
+		    case "esri":
+
+			tile_layer = L.esri.featureLayer( { 
+			    url: map_cfg.tile_url,
+			    style: {
+				color: '#000',
+				weight: 1,
+				opacity: 1
+			    },
+			    pointToLayer: function(feature, latlng) {
+				return L.circleMarker(latlng, {
+				    radius: 8,
+				    fillColor: "#ff0000",
+				    color: "#fff",
+				    weight: 1,
+				    opacity: 1,
+				    fillOpacity: 0.1
+				});
+			    }
+			});
+
+			tile_layer.on('load', function(l) {
+			    console.debug('ESRI Feature layer loaded', l);
+			});
+			
+			tile_layer.on('error', function(e) {
+			    console.error('ESRI Feature layer error:', e);
+			});
+
+			tile_layer.on('add', function(l) {
+			    console.debug('ESRI Feature layer added to map', l);
+			});
+			
+			tile_layer.addTo(map);
+			break;
 			
 		    case "protomaps":		    
 			
