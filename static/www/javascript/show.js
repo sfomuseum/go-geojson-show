@@ -118,71 +118,119 @@ window.addEventListener("load", function load(event){
     map.on("click", function(e){
 	unselect();
     });
+
+    const list_features = function(features) {
+	
+	const raw_el = document.querySelector("#raw");
+	raw_el.innerHTML = "";
+	
+	const format = function(show_id, str){
+	    
+	    // Remember: wof_format is defined by the /wasm/wof_format.wasm binary.
+	    // Details below.
+	    
+	    wof_format(str).then((rsp) => {
+		append(show_id, rsp);
+	    }).catch((err) => {
+		console.warn("Unable to format feature", err, str);
+		append(show_id, str);
+	    });
+	};
+	
+	const append = function(show_id, str) {
+	    var pre = document.createElement("pre");
+	    // Maybe... TBD...
+	    // pre.setAttribute("contenteditable", "true");
+	    pre.setAttribute("id", show_id);
+	    pre.appendChild(document.createTextNode(str));		    
+	    raw_el.appendChild(pre);
+	};
+	
+	const count = features.length;
+		
+	for (var i=0; i < count; i++){
+	    
+	    var show_id = features[i]["properties"]["show:id"];
+	    var this_f = structuredClone(features[i]);
+	    
+	    delete(this_f["properties"]["show:id"]);
+	    var str_f = JSON.stringify(this_f);
+	    
+	    format(show_id, str_f);
+	}
+	
+    };
     
     const init = function(local_cfg, map_cfg) {
 
+	if (local_cfg.edit_geometries){
+
+            map.pm.addControls({
+                position: 'topleft',
+                drawCircle: false,
+                drawMarker: false,          // don't draw default image-based markers
+                drawCircleMarker: true,     // draw circle-based markers instead
+                drawPolyline: false,        // there have never been polylines in WOF (or at least I don't think so)
+                drawRectangle: false,       // disabling (in favour of polygons) for the sake of less UI/chrome
+                drawText: false,
+                rotateMode: false,
+		
+            });
+
+	    const update_features = function(){
+		const feature_group = map.pm.getGeomanLayers(true);
+		const feature_collection = feature_group.toGeoJSON();
+
+		const features = feature_collection.features;
+		list_features(features);		
+	    };
+	    
+            map.on("pm:drawend", function(e){
+                console.log("draw end");
+		update_features();
+            });
+
+	    // START OF I don't understand why pm:dragend isn't triggered
+	    // so instead we need to watch pm:globaldragmodetoggled. Womp womp.
+	    
+	    map.on("pm:globaldragmodetoggled", (e) => {
+
+		if (! e.enabled){
+		    update_features();
+		}
+	    });
+	    
+            map.on("pm:dragend", function(e){
+                console.log("drag end");
+		update_features();
+            });
+
+	    // END OF I don't understand why pm:dragend isn't triggered
+	    
+            map.on('pm:remove', function (e) {
+		console.log("remove");
+		update_features();		
+            });
+
+            map.on('pm:globaleditmodetoggled', (e) => {
+                console.log("toggled");
+		update_features();		
+            });
+	}
+	
 	fetch("/features.geojson")
 	    .then((rsp) => rsp.json())
 	    .then((f) => {
 
 		var features = f.features;
-		var count = features.length;
+		var count = features.length;		
 		
 		for (var i=0; i < count; i++){
 		    var show_id = "show-" + (i+1);
 		    f.features[i]["properties"]["show:id"] = show_id;
 		}
-		
-		var raw_el = document.querySelector("#raw");
-		
-		var format = function(show_id, str){
-		    
-		    // Remember: wof_format is defined by the /wasm/wof_format.wasm binary.
-			// Details below.
-			
-			wof_format(str).then((rsp) => {
-			    append(show_id, rsp);
-			}).catch((err) => {
-			    console.warn("Unable to format feature", err, str);
-			    append(show_id, str);
-			});
-		};
-		
-		var append = function(show_id, str) {
-		    var pre = document.createElement("pre");
-		    pre.setAttribute("id", show_id);
-		    pre.appendChild(document.createTextNode(str));		    
-		    raw_el.appendChild(pre);
-		};
-		
-		if (raw_el){
-		    
-		    // Remember: Both sfomuseum.wasm.fetch and the WASM binary are imported and registered
-		    // in show.go. For details see: https://github.com/whosonfirst/go-whosonfirst-format-wasm
-		    
-		    sfomuseum.golang.wasm.fetch("/wasm/wof_format.wasm").then(rsp => {
-			
-			var features = f.features;
-			var count = features.length;
-			
-			for (var i=0; i < count; i++){
-			    
-			    var show_id = features[i]["properties"]["show:id"];
-			    var this_f = structuredClone(features[i]);
-			    
-			    delete(this_f["properties"]["show:id"]);
-			    var str_f = JSON.stringify(this_f);
-			    
-			    format(show_id, str_f);
-			}
-			
-		    }).catch((err) => {
-			console.warn("Unable to load wof_format.wasm", err);
-			var str_f = JSON.stringify(f, "", " ");		    
-			append(0, str_f);
-		    });
-		    
-		}
+
+		list_features(features);
 
 		var geojson_args = {
 		    
@@ -383,7 +431,11 @@ window.addEventListener("load", function load(event){
 		    }
 		}
 
-		init(local_cfg, map_cfg);
+		sfomuseum.golang.wasm.fetch("/wasm/wof_format.wasm").then(rsp => {		
+		    init(local_cfg, map_cfg);
+		}).catch((err) => {
+		    console.error("Failed to retrieve WOF format WASM binary", err);
+		});
 		
 	    }).catch((err) => {
 		console.error("Failed to retrieve map config", err);

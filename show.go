@@ -156,7 +156,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	local_cfg := &LocalConfig{
 		ClusterMarkers:    opts.ClusterMarkers,
 		ESRIFeatureLayers: esri_feature_layers,
-		EditGeometries: edit_geometries,
+		EditGeometries:    edit_geoms,
 	}
 
 	config_handler := LocalConfigHandler(local_cfg)

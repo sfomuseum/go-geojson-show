@@ -59,8 +59,8 @@ func DefaultFlagSet() *flag.FlagSet {
 
 	fs.BoolVar(&cluster_markers, "cluster-markers", false, "Cluster markers that a proximate to one another.")
 
-	fs.BoolVar(&edit_geoms, "edit-geoms", false, "Allow feature geometries to be edited.")
-	
+	fs.BoolVar(&edit_geoms, "edit-geometries", false, "Allow feature geometries to be edited.")
+
 	fs.IntVar(&port, "port", 0, "The port number to listen for requests on (on localhost). If 0 then a random port number will be chosen.")
 	fs.BoolVar(&verbose, "verbose", false, "Enable verbose (debug) logging.")
 
