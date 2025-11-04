@@ -215,6 +215,12 @@ window.addEventListener("load", function load(event){
 				    if (label_text.length > 0){ 
 					layer.bindPopup(label_text.join("<br />"));
 				    }
+
+				    const first = label_props[0];
+				    
+				    if ((first in feature.properties) && (feature.properties[first] != "")){
+					layer.bindTooltip(feature.properties[first]).openTooltip();
+				    }
 				}
 				
 			    }
