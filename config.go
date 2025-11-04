@@ -11,6 +11,8 @@ type LocalConfig struct {
 	ClusterMarkers bool `json:"cluster_markers"`
 	// One or more URIs to load using the L.esri.featureLayer method. Required if map provider is "leaflet".
 	ESRIFeatureLayers []string `json:"esri_feature_layers"`
+	// Allow individual GeoJSON Feature geometries to be edited.
+	EditGeometries bool `json:"edit_geometries"`
 }
 
 // LocalConfigHandler returns an `http.Handler` instance that when called will return 'cfg' as a JSON-encoded string.

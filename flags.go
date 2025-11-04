@@ -29,6 +29,7 @@ var label_properties multi.MultiString
 var panes multi.KeyValueInt64
 
 var cluster_markers bool
+var edit_geoms bool
 
 var verbose bool
 
@@ -58,6 +59,8 @@ func DefaultFlagSet() *flag.FlagSet {
 
 	fs.BoolVar(&cluster_markers, "cluster-markers", false, "Cluster markers that a proximate to one another.")
 
+	fs.BoolVar(&edit_geoms, "edit-geoms", false, "Allow feature geometries to be edited.")
+	
 	fs.IntVar(&port, "port", 0, "The port number to listen for requests on (on localhost). If 0 then a random port number will be chosen.")
 	fs.BoolVar(&verbose, "verbose", false, "Enable verbose (debug) logging.")
 

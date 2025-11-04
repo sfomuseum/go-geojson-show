@@ -1,4 +1,5 @@
 LEAFLET_VERSION=1.9.4
+GEOMAN_VERSION=2.18.2
 ESRI_LEAFLET_VERSION=3.0.19
 ESRI_LEAFLET_VECTOR_VERSION=4.3.2
 
@@ -12,6 +13,10 @@ leaflet:
 esri-leaflet:
 	curl -s -o javascript/esri-leaflet-$(ESRI_LEAFLET_VERSION).js https://unpkg.com/esri-leaflet@$(ESRI_LEAFLET_VERSION)/dist/esri-leaflet.js
 	curl -s -o javascript/esri-leaflet-vector-$(ESRI_LEAFLET_VECTOR_VERSION).js https://unpkg.com/esri-leaflet-vector@$(ESRI_LEAFLET_VECTOR_VERSION)/dist/esri-leaflet-vector.js
+
+geoman:
+	curl -s -o css/leaflet-geoman-$(GEOMAN_VERSION).css https://unpkg.com/@geoman-io/leaflet-geoman-free@$(GEOMAN_VERSION)/dist/leaflet-geoman.css
+	curl -s -o javascript/leaflet-geoman-$(GEOMAN_VERSION).js https://unpkg.com/@geoman-io/leaflet-geoman-free@$(GEOMAN_VERSION)/dist/leaflet-geoman.js
 
 protomaps:
 	curl -s -o javascript/protomaps-leaflet-$(PROTOMAPS_LEAFLET_VERSION).js https://unpkg.com/protomaps-leaflet@$(PROTOMAPS_LEAFLET_VERSION)/dist/protomaps-leaflet.js
