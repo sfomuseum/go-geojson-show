@@ -37,10 +37,12 @@ Valid options are:
     	A valid sfomuseum/go-www-show/v2.Browser URI. Valid options are: web:// (default "web://")
   -cluster-markers
     	Cluster markers that a proximate to one another.
+  -esri-feature-layer value
+    	One or more ESRI Feature layer URIs to use as a base map. Required if -map-provider is 'esri'.
   -label value
     	Zero or more (GeoJSON Feature) properties to use to construct a label for a feature's popup menu when it is clicked on.
   -map-provider string
-    	Valid options are: leaflet, protomaps (default "leaflet")
+    	Valid options are: leaflet, protomaps, esri. (default "leaflet")
   -map-tile-uri string
     	A valid Leaflet tile layer URI. See documentation for special-case (interpolated tile) URIs. (default "https://tile.openstreetmap.org/{z}/{x}/{y}.png")
   -pane value
@@ -49,6 +51,8 @@ Valid options are:
     	A custom Leaflet style definition for point geometries. This may either be a JSON-encoded string or a path on disk.
   -port int
     	The port number to listen for requests on (on localhost). If 0 then a random port number will be chosen.
+  -protomaps-max-data-zoom int
+    	The maximum zoom (tile) level for data in a PMTiles database. Necessary for "over-zooming".
   -protomaps-theme string
     	A valid Protomaps theme label. (default "white")
   -style string
@@ -125,6 +129,30 @@ $> cat /usr/local/data/sfomuseum-data-architecture/data/102/527/513/102527513.ge
 	
 2024/08/13 13:07:08 Features are viewable at http://localhost:63818
 ```
+
+##### Read the (GeoJSON) output of another process and show those features on a map using an ESRI Feature layer endpoint
+
+![](docs/images/go-geojson-show-protomaps-esri-feature-layer.png)
+
+```
+$> ./bin/show \
+	-map-provider esri \
+	-esri-feature-layer https://{HOST}/arcgis/rest/services/{SERVICE}/MapServer/{LAYER} \
+	-label wof:name \
+	/usr/local/data/sfomuseum-data-publicart/work/publicart-latest.geojson
+	
+2025/11/04 10:34:48 INFO Server is ready and features are viewable url=http://localhost:63547
+```
+
+As of this writing ESRI feature layers have limited styling options. The default styling is simply to draw each feature with a simple black border and fill. You can override the default Leaflet style options (`color`, `opacity`, `fillColor` and `fillOpacity`) by passing them in as query parameters to the feature layer prepended by a "_". For example:
+
+```
+https://{HOST}/arcgis/rest/services/{SERVICE}/MapServer/{LAYER}?_fillColor=red&_fillOpacity=.5
+```
+
+_These query parameters will be removed from the URI before the feature layer is created._
+
+You can specify multiple ESRI feature layers and they will be displayed in the order of their corresponding `-esri-feature-layer` flags.
 
 ##### Read a single GeoJSON file from disk and show it with a custom marker style
 
@@ -222,6 +250,7 @@ Aside from the `-label` flags (described above) this example exposes two other f
     }
 }
 ```
+
 
 ## Advanced usage
 

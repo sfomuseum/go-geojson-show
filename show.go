@@ -132,6 +132,10 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 
 	mux.Handle("/features.geojson", data_handler)
 
+	// Note: esri_feature_layers is assigned to local config below
+	// since it's too soon to assume that ESRI+Leaflet stuff should
+	// be part of aaronland/go-http-maps
+
 	map_opts := &maps.AssignMapConfigHandlerOptions{
 		MapProvider:            opts.MapProvider,
 		MapTileURI:             opts.MapTileURI,
@@ -140,7 +144,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		LeafletLabelProperties: opts.LabelProperties,
 		LeafletPanes:           opts.LeafletPanes,
 		ProtomapsTheme:         opts.ProtomapsTheme,
-		ProtomapsMaxDataZoom:         opts.ProtomapsMaxDataZoom,		
+		ProtomapsMaxDataZoom:   opts.ProtomapsMaxDataZoom,
 	}
 
 	err := maps.AssignMapConfigHandler(map_opts, mux, "/map.json")
@@ -150,7 +154,8 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	}
 
 	local_cfg := &LocalConfig{
-		ClusterMarkers: opts.ClusterMarkers,
+		ClusterMarkers:    opts.ClusterMarkers,
+		ESRIFeatureLayers: esri_feature_layers,
 	}
 
 	config_handler := LocalConfigHandler(local_cfg)

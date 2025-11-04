@@ -120,7 +120,7 @@ window.addEventListener("load", function load(event){
     });
     
     const init = function(local_cfg, map_cfg) {
-	
+
 	fetch("/features.geojson")
 	    .then((rsp) => rsp.json())
 	    .then((f) => {
@@ -284,6 +284,65 @@ window.addEventListener("load", function load(event){
 			
 			tile_layer.addTo(map);
 			break;
+
+		    case "esri":
+
+			if ("esri_feature_layers" in local_cfg){
+			    
+			    const layers = local_cfg.esri_feature_layers;
+			    const count_layers = layers.length;
+			    
+			    for (var i=0; i < count_layers; i++){
+				
+				var tile_uri = layers[i];
+				
+				var tile_style = {
+				    color: '#000',
+				    weight: 1,
+				    opacity: 1,
+				    fillColor: '#fff',
+				    fillOpacity: 0,
+				};
+				
+				const tile_u = new URL(tile_uri);
+				const tile_q = tile_u.searchParams;
+				
+				for (k in tile_style){
+				    
+				    var q_key = "_" + k;
+				    
+				    if (tile_q.has(q_key)){
+					tile_style[k] = tile_q.get(q_key);
+					tile_q.delete(q_key);
+				    }
+				}
+				
+				tile_u.searchParams = tile_q;
+				tile_uri = tile_u.toString();
+				
+				var tile_args = {
+				    url: tile_uri,
+				    style: tile_style,
+				    /*
+				       pointToLayer: function(feature, latlng) {
+				       return L.circleMarker(latlng, {
+				       radius: 8,
+				       fillColor: "#ff0000",
+				       color: "#fff",
+				       weight: 1,
+				       opacity: 1,
+				       fillOpacity: 0.1
+				       });
+				       }
+				     */
+				};
+				
+				var tile_layer = L.esri.featureLayer(tile_args);
+				tile_layer.addTo(map);
+			    }
+			}
+			
+			break;
 			
 		    case "protomaps":		    
 			
@@ -317,7 +376,7 @@ window.addEventListener("load", function load(event){
 			console.debug("Created pane", label, map_cfg.leaflet.panes.label);
 		    }
 		}
-		
+
 		init(local_cfg, map_cfg);
 		
 	    }).catch((err) => {
