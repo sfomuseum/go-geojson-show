@@ -130,6 +130,28 @@ $> cat /usr/local/data/sfomuseum-data-architecture/data/102/527/513/102527513.ge
 2024/08/13 13:07:08 Features are viewable at http://localhost:63818
 ```
 
+##### Read the (GeoJSON) output of another process and show those features on a map using an ESRI Feature layer endpoint
+
+![](docs/images/go-geojson-show-protomaps-esri-feature-layer.png)
+
+```
+$> ./bin/show \
+	-map-provider esri \
+	-esri-feature-layer https://{HOST}/arcgis/rest/services/{SERVICE}/MapServer/{LAYER} \
+	-label wof:name \
+	/usr/local/data/sfomuseum-data-publicart/work/publicart-latest.geojson
+	
+2025/11/04 10:34:48 INFO Server is ready and features are viewable url=http://localhost:63547
+```
+
+As of this writing ESRI feature layers have limited styling options. The default styling is simply to draw each feature with a simple black border and fill. You can override the default Leaflet style options (`color`, `opacity`, `fillColor` and `fillOpacity`) by passing them in as query parameters to the feature layer prepended by a "_". For example:
+
+```
+https://{HOST}/arcgis/rest/services/{SERVICE}/MapServer/{LAYER}?_fillColor=red&_fillOpacity=.5
+```
+
+_These query parameters will be removed from the URI before the feature layer is created._
+
 ##### Read a single GeoJSON file from disk and show it with a custom marker style
 
 ![](docs/images/go-geojson-show-styles.png)
@@ -226,6 +248,7 @@ Aside from the `-label` flags (described above) this example exposes two other f
     }
 }
 ```
+
 
 ## Advanced usage
 
