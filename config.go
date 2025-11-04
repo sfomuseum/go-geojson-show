@@ -9,6 +9,7 @@ import (
 type LocalConfig struct {
 	// Cluster markers that a proximate to one another.
 	ClusterMarkers bool `json:"cluster_markers"`
+	// One or more URIs to load using the L.esri.featureLayer method. Required if map provider is "leaflet".
 	ESRIFeatureLayers []string `json:"esri_feature_layers"`
 }
 

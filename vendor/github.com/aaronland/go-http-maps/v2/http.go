@@ -205,29 +205,22 @@ func AssignMapConfigHandler(opts *AssignMapConfigHandlerOptions, mux *http.Serve
 		}
 	}
 
-	switch opts.MapProvider {
-	case "leaflet", "protomaps":
-
-		if len(opts.LeafletLabelProperties) > 0 {
-
-			if map_cfg.Leaflet == nil {
-				map_cfg.Leaflet = &LeafletConfig{}
-			}
-
-			map_cfg.Leaflet.LabelProperties = opts.LeafletLabelProperties
+	if len(opts.LeafletLabelProperties) > 0 {
+		
+		if map_cfg.Leaflet == nil {
+			map_cfg.Leaflet = &LeafletConfig{}
 		}
-
-		if opts.LeafletPanes != nil {
-
-			if map_cfg.Leaflet == nil {
-				map_cfg.Leaflet = &LeafletConfig{}
-			}
-
-			map_cfg.Leaflet.Panes = opts.LeafletPanes
+		
+		map_cfg.Leaflet.LabelProperties = opts.LeafletLabelProperties
+	}
+	
+	if opts.LeafletPanes != nil {
+		
+		if map_cfg.Leaflet == nil {
+			map_cfg.Leaflet = &LeafletConfig{}
 		}
-
-	default:
-		// pass
+		
+		map_cfg.Leaflet.Panes = opts.LeafletPanes
 	}
 
 	map_cfg_handler := MapConfigHandler(map_cfg)

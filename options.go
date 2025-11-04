@@ -6,41 +6,45 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	
+
 	"github.com/paulmach/orb/geojson"
 	"github.com/sfomuseum/go-flags/flagset"
 	www_show "github.com/sfomuseum/go-www-show/v2"
 )
 
 type RunOptions struct {
-	MapProvider     string
-	MapTileURI      string
-	ProtomapsTheme  string
+	MapProvider          string
+	MapTileURI           string
+	ProtomapsTheme       string
 	ProtomapsMaxDataZoom int
-	Port            int
-	Features        []*geojson.Feature
-	Style           string
-	PointStyle      string
-	LabelProperties []string
-	LeafletPanes    map[string]int
-	ClusterMarkers  bool
-	Browser         www_show.Browser
-	Verbose         bool
+	Port                 int
+	Features             []*geojson.Feature
+	Style                string
+	PointStyle           string
+	LabelProperties      []string
+	LeafletPanes         map[string]int
+	ClusterMarkers       bool
+	Browser              www_show.Browser
+	Verbose              bool
 }
 
 func RunOptionsFromFlagSet(ctx context.Context, fs *flag.FlagSet) (*RunOptions, error) {
 
 	flagset.Parse(fs)
 
+	if map_provider == "esri" && len(esri_feature_layers) == 0 {
+		return nil, fmt.Errorf("One or more -esri-feature-layer URIs must be defined.")
+	}
+
 	opts := &RunOptions{
-		MapProvider:     map_provider,
-		MapTileURI:      map_tile_uri,
-		ProtomapsTheme:  protomaps_theme,
+		MapProvider:          map_provider,
+		MapTileURI:           map_tile_uri,
+		ProtomapsTheme:       protomaps_theme,
 		ProtomapsMaxDataZoom: protomaps_max_data_zoom,
-		Port:            port,
-		LabelProperties: label_properties,
-		ClusterMarkers:  cluster_markers,
-		Verbose:         verbose,
+		Port:                 port,
+		LabelProperties:      label_properties,
+		ClusterMarkers:       cluster_markers,
+		Verbose:              verbose,
 	}
 
 	if len(panes) > 0 {
@@ -63,7 +67,7 @@ func RunOptionsFromFlagSet(ctx context.Context, fs *flag.FlagSet) (*RunOptions, 
 	opts.Browser = br
 
 	if style != "" {
-		
+
 		if !strings.HasPrefix(style, "{") {
 
 			body, err := os.ReadFile(style)
@@ -79,7 +83,7 @@ func RunOptionsFromFlagSet(ctx context.Context, fs *flag.FlagSet) (*RunOptions, 
 	}
 
 	if point_style != "" {
-		
+
 		if !strings.HasPrefix(point_style, "{") {
 
 			body, err := os.ReadFile(point_style)

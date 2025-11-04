@@ -37,10 +37,12 @@ Valid options are:
     	A valid sfomuseum/go-www-show/v2.Browser URI. Valid options are: web:// (default "web://")
   -cluster-markers
     	Cluster markers that a proximate to one another.
+  -esri-feature-layer value
+    	One or more ESRI Feature layer URIs to use as a base map. Required if -map-provider is 'esri'.
   -label value
     	Zero or more (GeoJSON Feature) properties to use to construct a label for a feature's popup menu when it is clicked on.
   -map-provider string
-    	Valid options are: leaflet, protomaps (default "leaflet")
+    	Valid options are: leaflet, protomaps, esri. (default "leaflet")
   -map-tile-uri string
     	A valid Leaflet tile layer URI. See documentation for special-case (interpolated tile) URIs. (default "https://tile.openstreetmap.org/{z}/{x}/{y}.png")
   -pane value
@@ -49,6 +51,8 @@ Valid options are:
     	A custom Leaflet style definition for point geometries. This may either be a JSON-encoded string or a path on disk.
   -port int
     	The port number to listen for requests on (on localhost). If 0 then a random port number will be chosen.
+  -protomaps-max-data-zoom int
+    	The maximum zoom (tile) level for data in a PMTiles database. Necessary for "over-zooming".
   -protomaps-theme string
     	A valid Protomaps theme label. (default "white")
   -style string
