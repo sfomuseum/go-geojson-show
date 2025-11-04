@@ -152,6 +152,8 @@ https://{HOST}/arcgis/rest/services/{SERVICE}/MapServer/{LAYER}?_fillColor=red&_
 
 _These query parameters will be removed from the URI before the feature layer is created._
 
+You can specify multiple ESRI feature layers and they will be displayed in the order of their corresponding `-esri-feature-layer` flags.
+
 ##### Read a single GeoJSON file from disk and show it with a custom marker style
 
 ![](docs/images/go-geojson-show-styles.png)
