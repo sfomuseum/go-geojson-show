@@ -57,6 +57,25 @@ type AssignMapConfigHandlerOptions struct {
 // to 'mux' at 'map_cfg_uri'.
 func AssignMapConfigHandler(opts *AssignMapConfigHandlerOptions, mux *http.ServeMux, map_cfg_uri string) error {
 
+	map_cfg, err := MapConfigFromOptions(opts)
+
+	if err != nil {
+		return err
+	}
+
+	map_cfg_handler := MapConfigHandler(map_cfg)
+	mux.Handle(map_cfg_uri, map_cfg_handler)
+
+	if map_cfg.TileURLHandler != nil {
+		mux.Handle(map_cfg.TileURL, map_cfg.TileURLHandler)
+	}
+
+	return nil
+}
+
+// MapConfigFromOptions derives a new `MapConfig` instance from 'opts'.
+func MapConfigFromOptions(opts *AssignMapConfigHandlerOptions) (*MapConfig, error) {
+
 	map_cfg := &MapConfig{
 		Provider: opts.MapProvider,
 		TileURL:  opts.MapTileURI,
@@ -72,13 +91,13 @@ func AssignMapConfigHandler(opts *AssignMapConfigHandlerOptions, mux *http.Serve
 			lon, err := strconv.ParseFloat(parts[0], 10)
 
 			if err != nil {
-				return fmt.Errorf("Failed to parse longitude, %w", err)
+				return nil, fmt.Errorf("Failed to parse longitude, %w", err)
 			}
 
 			lat, err := strconv.ParseFloat(parts[1], 10)
 
 			if err != nil {
-				return fmt.Errorf("Failed to parse latitude, %w", err)
+				return nil, fmt.Errorf("Failed to parse latitude, %w", err)
 			}
 
 			map_cfg.InitialView = &InitialView{lon, lat}
@@ -88,19 +107,19 @@ func AssignMapConfigHandler(opts *AssignMapConfigHandlerOptions, mux *http.Serve
 			lon, err := strconv.ParseFloat(parts[0], 10)
 
 			if err != nil {
-				return fmt.Errorf("Failed to parse longitude, %w", err)
+				return nil, fmt.Errorf("Failed to parse longitude, %w", err)
 			}
 
 			lat, err := strconv.ParseFloat(parts[1], 10)
 
 			if err != nil {
-				return fmt.Errorf("Failed to parse latitude, %w", err)
+				return nil, fmt.Errorf("Failed to parse latitude, %w", err)
 			}
 
 			zoom, err := strconv.Atoi(parts[2])
 
 			if err != nil {
-				return fmt.Errorf("Failed to parse zoom, %w", err)
+				return nil, fmt.Errorf("Failed to parse zoom, %w", err)
 			}
 
 			map_cfg.InitialView = &InitialView{lon, lat}
@@ -111,36 +130,36 @@ func AssignMapConfigHandler(opts *AssignMapConfigHandlerOptions, mux *http.Serve
 			minx, err := strconv.ParseFloat(parts[0], 10)
 
 			if err != nil {
-				return fmt.Errorf("Invalid minx, %w", err)
+				return nil, fmt.Errorf("Invalid minx, %w", err)
 			}
 
 			miny, err := strconv.ParseFloat(parts[1], 10)
 
 			if err != nil {
-				return fmt.Errorf("Invalid miny, %w", err)
+				return nil, fmt.Errorf("Invalid miny, %w", err)
 			}
 
 			maxx, err := strconv.ParseFloat(parts[2], 10)
 
 			if err != nil {
-				return fmt.Errorf("Invalid maxx, %w", err)
+				return nil, fmt.Errorf("Invalid maxx, %w", err)
 			}
 
 			maxy, err := strconv.ParseFloat(parts[3], 10)
 
 			if err != nil {
-				return fmt.Errorf("Invalid maxy, %w", err)
+				return nil, fmt.Errorf("Invalid maxy, %w", err)
 			}
 
 			map_cfg.InitialBounds = &InitialBounds{minx, miny, maxx, maxy}
 
 		default:
-			return fmt.Errorf("Invalid initial view. Must be: 'lon,lat' or 'lon,lat,zoom' or 'minx,miny,maxx, maxy'")
+			return nil, fmt.Errorf("Invalid initial view. Must be: 'lon,lat' or 'lon,lat,zoom' or 'minx,miny,maxx, maxy'")
 		}
 	}
 
-	switch opts.MapProvider {
-	case "leaflet":
+	switch {
+	case opts.MapProvider == "leaflet":
 
 		if opts.LeafletStyle != "" || opts.LeafletPointStyle != "" {
 
@@ -151,7 +170,7 @@ func AssignMapConfigHandler(opts *AssignMapConfigHandlerOptions, mux *http.Serve
 				s, err := UnmarshalLeafletStyle(opts.LeafletStyle)
 
 				if err != nil {
-					return fmt.Errorf("Failed to unmarshal leaflet style, %w", err)
+					return nil, fmt.Errorf("Failed to unmarshal leaflet style, %w", err)
 				}
 
 				leaflet_cfg.Style = s
@@ -162,7 +181,7 @@ func AssignMapConfigHandler(opts *AssignMapConfigHandlerOptions, mux *http.Serve
 				s, err := UnmarshalLeafletStyle(opts.LeafletPointStyle)
 
 				if err != nil {
-					return fmt.Errorf("Failed to unmarshal leaflet point style, %w", err)
+					return nil, fmt.Errorf("Failed to unmarshal leaflet point style, %w", err)
 				}
 
 				leaflet_cfg.PointStyle = s
@@ -171,12 +190,12 @@ func AssignMapConfigHandler(opts *AssignMapConfigHandlerOptions, mux *http.Serve
 			map_cfg.Leaflet = leaflet_cfg
 		}
 
-	case "protomaps":
+	case strings.HasPrefix(opts.MapProvider, "protomaps"):
 
 		u, err := url.Parse(opts.MapTileURI)
 
 		if err != nil {
-			return fmt.Errorf("Failed to parse Protomaps tile URL, %w", err)
+			return nil, fmt.Errorf("Failed to parse Protomaps tile URL, %w", err)
 		}
 
 		switch u.Scheme {
@@ -185,11 +204,11 @@ func AssignMapConfigHandler(opts *AssignMapConfigHandlerOptions, mux *http.Serve
 			mux_url, mux_handler, err := ProtomapsFileHandlerFromPath(u.Path, "")
 
 			if err != nil {
-				return fmt.Errorf("Failed to determine absolute path for '%s', %w", opts.MapTileURI, err)
+				return nil, fmt.Errorf("Failed to determine absolute path for '%s', %w", opts.MapTileURI, err)
 			}
 
-			mux.Handle(mux_url, mux_handler)
 			map_cfg.TileURL = mux_url
+			map_cfg.TileURLHandler = mux_handler
 
 		case "api":
 			key := u.Host
@@ -206,25 +225,22 @@ func AssignMapConfigHandler(opts *AssignMapConfigHandlerOptions, mux *http.Serve
 	}
 
 	if len(opts.LeafletLabelProperties) > 0 {
-		
+
 		if map_cfg.Leaflet == nil {
 			map_cfg.Leaflet = &LeafletConfig{}
 		}
-		
+
 		map_cfg.Leaflet.LabelProperties = opts.LeafletLabelProperties
 	}
-	
+
 	if opts.LeafletPanes != nil {
-		
+
 		if map_cfg.Leaflet == nil {
 			map_cfg.Leaflet = &LeafletConfig{}
 		}
-		
+
 		map_cfg.Leaflet.Panes = opts.LeafletPanes
 	}
 
-	map_cfg_handler := MapConfigHandler(map_cfg)
-	mux.Handle(map_cfg_uri, map_cfg_handler)
-
-	return nil
+	return map_cfg, nil
 }

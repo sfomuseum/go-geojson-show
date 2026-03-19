@@ -2,6 +2,7 @@ package maps
 
 import (
 	"fmt"
+	"net/http"
 )
 
 type InitialView [2]float64
@@ -22,6 +23,8 @@ type MapConfig struct {
 	Provider string `json:"provider"`
 	// A valid Leaflet tile layer URI.
 	TileURL string `json:"tile_url"`
+	// A custom http.Handler to use with `TileURL`. Used for PMTiles-based tiles.
+	TileURLHandler http.Handler `json:"tile_url_handler,omitempty"`
 	// Optional Protomaps configuration details
 	Protomaps *ProtomapsConfig `json:"protomaps,omitempty"`
 	// Optional Leaflet configuration details

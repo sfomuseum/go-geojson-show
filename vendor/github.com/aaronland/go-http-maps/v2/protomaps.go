@@ -14,6 +14,10 @@ type ProtomapsConfig struct {
 	Theme string `json:"theme"`
 	// MaxDataZoom is the maximum zoom (tile) level for data in a PMTiles database
 	MaxDataZoom int `json:"max_data_zoom,omitempty"`
+	// 
+	PaintRules []map[string]any `json:"paintRules"`
+	//
+	LabelRules []map[string]any `json:"labelRules"`	
 }
 
 // ProtomapsFileHandlerFromPath will take a path and create a http.FileServer handler

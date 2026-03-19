@@ -10,7 +10,7 @@ Go package providing opinionated HTTP middleware for web-based map tiles.
 
 The original motivation for the `go-http-maps` package was to define a handful of top-level methods and `net/http` middleware handlers to manage the drudegry of setting up maps, with a variety of map providers (Leaflet, Protomaps, Nextzen/Tangramjs), It "worked" but, in the end, it was also not "easy".
 
-Version 2 removes most of the functionality of the `go-http-maps` package and instead focuses on a handful of methods for providing a dynamic map "config" file (exposed as an HTTP endpoint) which can be from the browser.
+Version 2 removes most of the functionality of the `go-http-maps` package and instead focuses on a handful of methods for providing a dynamic map "config" file (exposed as an HTTP endpoint) which can be retrieved and processed from the browser.
 
 This package no longer provides static asset handlers for Leaflet or Protomaps. It is left up to you to bundle (and serve) them from your own code. You could, if you wanted, define a custom `http.Handler` instance to load those files from the `github.com/aaronland/go-http-maps/v2/static/www.FS` embedded filesystem but that's still something you'll need to do on your own.
 
@@ -119,7 +119,7 @@ The "nut" of it being this part:
 
 Which populates the `maps.AssignMapConfigHandlerOptions` with map-specific command line flags and passes those options (along with your `http.ServeMux` instance) to the `AssignMapConfigHandler` ethod. This method will validate all the options and create a new map config `http.Handler` assigning it to the `http.ServeMux` instance.
 
-If you are using Protomaps as your map provider and the corresponding `MapTileURI` starts with `file://` it will be assumed that you are trying to serve a local Protomaps database and a matching `http.Handler` will assign to the `http.ServeMux` instance.
+If your map provider start with "protomaps" and the corresponding `MapTileURI` starts with `file://` it will be assumed that you are trying to serve a local Protomaps database and a matching `http.Handler` will assign to the `http.ServeMux` instance.
 
 And then in your JavaScript code you would write something like this:
 
@@ -153,7 +153,7 @@ window.addEventListener("load", function load(event){
 
 		    var pm_args = {
                         url: tile_url,
-                        theme: cfg.protomaps.theme,
+                        flavor: cfg.protomaps.theme,
                     };
 
 		    // Necessary for "over-zooming"
@@ -216,12 +216,12 @@ go run cmd/example/main.go \
 2025/03/06 10:00:09 INFO Listening for requests address=localhost:8080
 ```
 
-### Protomaps
+### Protomaps (Leaflet)
 
 ![](docs/images/go-http-maps-protomaps.png)
 
 ```
-$> make example-protomaps
+$> make example-pm
 go run cmd/example/main.go \
 		-initial-view '-122.384292,37.621131,13' \
 		-map-provider protomaps \
@@ -230,3 +230,54 @@ go run cmd/example/main.go \
 2025/03/06 09:59:05 INFO Listening for requests address=localhost:8080
 ```
 
+_Note: The [protomaps/protomaps-leaflet](https://github.com/protomaps/protomaps-leaflet) JavaScript library has been put in maitainance mode. All new Protomaps features are only being added to the [PMTiles for MapLibre GL](https://docs.protomaps.com/pmtiles/maplibre) libraries._
+
+### Protomaps (Leaflet with custom paint rules)
+
+![](docs/images/go-http-maps-protomaps-paint.png)
+
+```
+$> make example-pm-paint
+go run cmd/example/main.go \
+		-initial-view '-122.384292,37.621131,13' \
+		-map-provider protomaps-paint \
+		-protomaps-max-data-zoom 14 \
+		-map-tile-uri 'file:///Users/asc/aaronland/go-http-maps/fixtures/sfo.pmtiles'
+2026/03/18 10:47:30 INFO Listening for requests address=localhost:8080
+```
+
+Custom paint (or label) rules are not part of the map "config" file and need to be added manually in your JavaScript code. See [static/www/javascript/index.init.js](static/www/javascript/index.init.js) for details.
+
+_Note: The [protomaps/protomaps-leaflet](https://github.com/protomaps/protomaps-leaflet) JavaScript library has been put in maitainance mode. All new Protomaps features are only being added to the [PMTiles for MapLibre GL](https://docs.protomaps.com/pmtiles/maplibre) libraries._
+
+### Protomaps (Leaflet with raster tiles)
+
+```
+$> make example-pm-raster
+go run cmd/example/main.go \
+		-initial-view '-122.384292,37.621131,13' \
+		-map-provider protomaps-raster \
+		-protomaps-max-data-zoom 14 \
+		-map-tile-uri https://static.sfomuseum.org/aerial/1936.pmtiles
+2026/03/18 10:47:59 INFO Listening for requests address=localhost:8080
+```
+
+![](docs/images/go-http-maps-protomaps-raster.png)
+
+_Note: The [protomaps/protomaps-leaflet](https://github.com/protomaps/protomaps-leaflet) JavaScript library has been put in maitainance mode. All new Protomaps features are only being added to the [PMTiles for MapLibre GL](https://docs.protomaps.com/pmtiles/maplibre) libraries._
+
+### Protomaps (MapLibre)
+
+![](docs/images/go-http-maps-protomaps-ml.png)
+
+```
+$> make example-pm-ml
+go run cmd/example/main.go \
+		-initial-view '-122.384292,37.621131,13' \
+		-map-provider protomaps-ml \
+		-protomaps-max-data-zoom 14 \
+		-map-tile-uri 'file:///Users/asc/aaronland/go-http-maps/fixtures/sfo.pmtiles'
+2026/03/18 10:48:13 INFO Listening for requests address=localhost:8080
+```
+
+MapLibre styling rules are not part of the map "config" file and need to be added manually in your JavaScript code. See [static/www/javascript/index.init.js](static/www/javascript/index.init.js) for details.

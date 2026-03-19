@@ -1,11 +1,11 @@
 module github.com/sfomuseum/go-geojson-show
 
-go 1.24.0
+go 1.25.0
 
 require (
-	github.com/aaronland/go-http-maps/v2 v2.3.1
+	github.com/aaronland/go-http-maps/v2 v2.5.0
 	github.com/paulmach/orb v0.12.0
-	github.com/sfomuseum/go-flags v0.11.0
+	github.com/sfomuseum/go-flags v0.12.1
 	github.com/sfomuseum/go-www-show/v2 v2.0.0
 	github.com/tidwall/gjson v1.18.0
 )
